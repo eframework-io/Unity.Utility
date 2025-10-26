@@ -171,8 +171,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION="${{ needs.prepare.outputs.new_version }}"
-          git config --global user.name "github-actions-bot"
-          git config --global user.email "github-actions-bot@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           # 提交版本
           git add package.json

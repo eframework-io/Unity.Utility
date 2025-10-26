@@ -1,0 +1,9 @@
+{
+    "name": "EFramework.Unity.Utility.Tests",
+    "references": [
+        "EFramework.Unity.Utility"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

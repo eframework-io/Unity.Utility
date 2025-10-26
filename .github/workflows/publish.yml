@@ -121,7 +121,6 @@ jobs:
   test:
     name: 运行单元测试
     needs: prepare
-    if: ${{ github.event.inputs.skip_test != 'true' }}
     permissions:
       checks: write
       contents: read
@@ -136,7 +135,7 @@ jobs:
   publish:
     name: 运行版本发布
     needs: [prepare, test]
-    if: ${{ needs.test.result == 'success' || needs.test.result == 'skipped' }}
+    if: ${{ needs.test.result == 'success' }}
     runs-on: ubuntu-latest
     env:
       TZ: "Asia/Shanghai"

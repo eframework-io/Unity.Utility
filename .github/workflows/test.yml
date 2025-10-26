@@ -32,10 +32,6 @@ on:
         required: false
         type: string
         default: '["PlayMode"]'
-    outputs:
-      test_passed:
-        description: "测试是否通过"
-        value: ${{ jobs.test.outputs.passed }}
 
 permissions:
   checks: write

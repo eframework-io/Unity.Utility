@@ -135,8 +135,8 @@ jobs:
 
   publish:
     name: 运行版本发布
-    needs: [prepare]
-    if: ${{ github.event.inputs.skip_test == 'true' || needs.test.result == 'success' }}
+    needs: [prepare, test]
+    if: ${{ needs.test.result == 'success' || needs.test.result == 'skipped' }}
     runs-on: ubuntu-latest
     env:
       TZ: "Asia/Shanghai"

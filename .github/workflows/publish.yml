@@ -6,11 +6,6 @@ on:
       new_version:
         description: "输入发布版本（如：1.0.0，默认递增）"
         required: false
-      skip_test:
-        description: "是否忽略测试"
-        type: boolean
-        default: false
-        required: false
       confirm_repo:
         description: "确认仓库名称"
         required: true

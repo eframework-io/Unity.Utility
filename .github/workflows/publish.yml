@@ -203,7 +203,7 @@ jobs:
 
       - name: 通知发布版本
         run: |
-          if [ -n "${{ secrets.DISCORD_NOTIFICATION_URL }}" ]; then
+          if [ -n "${{ secrets.DISCORD_APP_GITHUB_RELEASE }}" ]; then
             echo "发送 Discord 通知..."
             curl -H "Content-Type: application/json" \
                  -d "$(jq -n \
@@ -211,10 +211,10 @@ jobs:
                       --arg url "https://github.com/${{ github.repository }}/releases/tag/v${{ needs.prepare.outputs.new_version }}" \
                       --arg desc "${{ needs.prepare.outputs.release_content }}" \
                       '{embeds: [{title: $title, url: $url, description: $desc, color: 5814783}]}')" \
-                 ${{ secrets.DISCORD_NOTIFICATION_URL }}
+                 ${{ secrets.DISCORD_APP_GITHUB_RELEASE }}
             echo "Discord 通知发送完成"
           else
-            echo "跳过 Discord 通知：DISCORD_NOTIFICATION_URL 未配置"
+            echo "跳过 Discord 通知：DISCORD_APP_GITHUB_RELEASE 未配置"
           fi
 
       - name: 版本发布完成

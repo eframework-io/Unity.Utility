@@ -428,6 +428,7 @@ namespace EFramework.Unity.Utility
                         FileName = "git",
                         Arguments = "remote get-url origin",
                         RedirectStandardOutput = true,
+                        RedirectStandardError = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
                     };

@@ -10,6 +10,7 @@
 - 重构 XEnv 模块的首选项前缀为 XEnv
 - 重构 XLog 模块的首选项前缀为 XLog
 - 标准化产品名称、项目自述及模块文档
+- 移除 XPrefs.IRemote.IHandler 接口回调的 context 参数
 
 ## [1.0.0] - 2025-10-26
 ### 新增

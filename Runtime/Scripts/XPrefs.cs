@@ -75,25 +75,25 @@ namespace EFramework.Unity.Utility
     ///         public string Uri => "http://example.com/config";
     /// 
     ///         // OnStarted 是流程启动的回调。
-    ///         public void OnStarted(XPrefs.IRemote context) { }
+    ///         public void OnStarted() { }
     ///         
     ///         // OnRequest 是预请求的回调。
-    ///         public void OnRequest(XPrefs.IRemote context, UnityWebRequest request) { 
+    ///         public void OnRequest(UnityWebRequest request) { 
     ///             request.timeout = 10;
     ///         }
     /// 
     ///         // OnRetry 是错误重试的回调。
-    ///         public bool OnRetry(XPrefs.IRemote context, int count, out float pending)
+    ///         public bool OnRetry(int count, out float pending)
     ///         {
     ///             pending = 1.0f;
     ///             return count < 3;
     ///         }
     /// 
     ///         // OnSucceeded 是请求成功的回调。
-    ///         public void OnSucceeded(XPrefs.IRemote context) { }
+    ///         public void OnSucceeded() { }
     /// 
     ///         // OnFailed 是请求失败的回调。
-    ///         public void OnFailed(XPrefs.IRemote context) { }
+    ///         public void OnFailed() { }
     ///     }
     /// 
     ///     // 读取远端首选项
@@ -1388,36 +1388,31 @@ namespace EFramework.Unity.Utility
                 /// <summary>
                 /// OnStarted 是流程启动的回调。
                 /// </summary>
-                /// <param name="context">上下文实例</param>
-                void OnStarted(IRemote context);
+                void OnStarted();
 
                 /// <summary>
                 /// OnRequest 是预请求的回调。
                 /// </summary>
-                /// <param name="context">上下文实例</param>
-                /// <param name="request">HTTP 请求实例</param>
-                void OnRequest(IRemote context, UnityWebRequest request);
+                /// <param name="request">网络请求实例</param>
+                void OnRequest(UnityWebRequest request);
 
                 /// <summary>
                 /// OnRetry 是错误重试的回调。
                 /// </summary>
-                /// <param name="context">上下文实例</param>
                 /// <param name="count">重试次数</param>
                 /// <param name="pending">重试等待</param>
                 /// <returns></returns>
-                bool OnRetry(IRemote context, int count, out float pending);
+                bool OnRetry(int count, out float pending);
 
                 /// <summary>
                 /// OnSucceeded 是请求成功的回调。
                 /// </summary>
-                /// <param name="context">上下文实例</param>
-                void OnSucceeded(IRemote context);
+                void OnSucceeded();
 
                 /// <summary>
                 /// OnFailed 是请求失败的回调。
                 /// </summary>
-                /// <param name="context">上下文实例</param>
-                void OnFailed(IRemote context);
+                void OnFailed();
             }
 
             /// <summary>
@@ -1438,13 +1433,13 @@ namespace EFramework.Unity.Utility
                     {
                         Error = string.Empty;
                         XLog.Notice("XPrefs.IRemote.Read: requesting <a href=\"{0}\">{1}</a>.", handler.Uri, handler.Uri);
-                        if (executeCount == 0) handler.OnStarted(this);
+                        if (executeCount == 0) handler.OnStarted();
 
                         executeCount++;
 
                         using var req = UnityWebRequest.Get(handler.Uri);
                         req.timeout = 10;
-                        handler.OnRequest(this, req);
+                        handler.OnRequest(req);
                         yield return req.SendWebRequest();
                         if (req.responseCode == 200)
                         {
@@ -1458,20 +1453,20 @@ namespace EFramework.Unity.Utility
                         if (string.IsNullOrEmpty(Error) == false)
                         {
                             XLog.Error($"XPrefs.IRemote.Read: request <a href=\"{handler.Uri}\">{handler.Uri}</a> with error: {Error}");
-                            if (handler.OnRetry(this, executeCount, out var pending) && pending > 0)
+                            if (handler.OnRetry(executeCount, out var pending) && pending > 0)
                             {
                                 yield return new WaitForSeconds(pending);
                             }
                             else
                             {
-                                handler.OnFailed(this);
+                                handler.OnFailed();
                                 break;
                             }
                         }
                         else
                         {
                             XLog.Notice("XPrefs.IRemote.Read: request and parse preferences succeeded.");
-                            handler.OnSucceeded(this);
+                            handler.OnSucceeded();
                             break;
                         }
                     }

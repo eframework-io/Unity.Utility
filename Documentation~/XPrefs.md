@@ -76,25 +76,25 @@ public class RemoteHandler : XPrefs.IRemote.IHandler
     public string Uri => "http://example.com/config";
 
     // OnStarted 是流程启动的回调。
-    public void OnStarted(XPrefs.IRemote context) { }
+    public void OnStarted() { }
     
     // OnRequest 是预请求的回调。
-    public void OnRequest(XPrefs.IRemote context, UnityWebRequest request) { 
+    public void OnRequest(UnityWebRequest request) { 
         request.timeout = 10;
     }
 
     // OnRetry 是错误重试的回调。
-    public bool OnRetry(XPrefs.IRemote context, int count, out float pending)
+    public bool OnRetry(int count, out float pending)
     {
         pending = 1.0f;
         return count < 3;
     }
 
     // OnSucceeded 是请求成功的回调。
-    public void OnSucceeded(XPrefs.IRemote context) { }
+    public void OnSucceeded() { }
 
     // OnFailed 是请求失败的回调。
-    public void OnFailed(XPrefs.IRemote context) { }
+    public void OnFailed() { }
 }
 
 // 读取远端首选项

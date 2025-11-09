@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XEvent 是一个轻量级的事件管理器，支持多重监听、单次及泛型回调和批量通知等功能。
+提供了轻量级的事件管理器，支持多重监听、单次及泛型回调和批量通知等功能。
 
 ## 功能特性
 

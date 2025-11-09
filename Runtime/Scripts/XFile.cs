@@ -13,7 +13,7 @@ using ICSharpCode.SharpZipLib.Zip;
 namespace EFramework.Unity.Utility
 {
     /// <summary>
-    /// XFile 提供了文件系统操作功能，支持文件和目录的基本操作、路径处理、压缩解压和文件校验。
+    /// XFile 简化了对文件和目录的基本操作，支持路径归一化、解压缩文件、文件校验等功能。
     /// </summary>
     /// <remarks>
     /// <code>

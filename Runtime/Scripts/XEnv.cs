@@ -12,7 +12,7 @@ using UnityEngine;
 namespace EFramework.Unity.Utility
 {
     /// <summary>
-    /// XEnv 是一个环境配置管理工具，支持多平台识别、应用配置管理、路径管理、命令行参数解析和环境变量求值等功能。
+    /// XEnv 提供了应用程序的环境管理，支持多平台识别、路径管理、命令行参数解析和环境变量求值等功能。
     /// </summary>
     /// <remarks>
     /// <code>

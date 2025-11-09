@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XString 是一个高效的字符串工具类，实现了字符串处理、数值转换、加密解密和变量求值等功能。
+实现了文本处理、数值转换、加密解密和变量求值等功能，是一个高效的字符串工具类。
 
 ## 功能特性
 

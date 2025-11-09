@@ -15,18 +15,18 @@ namespace EFramework.Unity.Utility
 {
     #region 基础类型
     /// <summary>
-    /// XPrefs 是一个灵活高效的配置系统，实现了多源化配置的读写，支持自定义编辑器、变量求值和命令行参数覆盖等功能。
+    /// XPrefs 实现了多源化配置的读写，支持可视化编辑、变量求值和命令行参数覆盖等功能，是一个灵活高效的首选项系统。
     /// </summary>
     /// <remarks>
     /// <code>
     /// 功能特性
-    /// - 多源化配置：支持内置配置（只读）、本地配置（可写）和远端配置（只读），支持多个配置源按优先级顺序读取
+    /// - 多源化配置：支持资产、本地、远端首选项的多源化解析，按顺序优先级获取配置项
     /// - 多数据类型：支持基础类型（整数、浮点数、布尔值、字符串）、数组类型及配置实例（IBase）
-    /// - 变量求值：支持通过命令行参数动态覆盖配置项，使用 ${Preferences.Key} 语法引用其他配置项
+    /// - 变量求值：支持命令行参数覆盖配置项，使用 ${Preferences.Key} 语法引用其他配置项
     /// - 自定义编辑器：通过自定义编辑器实现可视化编辑，支持在保存、应用和构建流程中注入自定义逻辑
     /// 
     /// 使用手册
-    /// 1. 基础配置操作
+    /// 1. 基础操作
     /// 
     /// 1.1 检查配置项
     ///     // 检查配置项是否存在
@@ -56,11 +56,10 @@ namespace EFramework.Unity.Utility
     /// 
     /// 2. 配置源管理
     /// 
-    /// 2.1 内置配置（只读）
-    ///     // 读取内置配置
+    /// 2.1 资产首选项
     ///     var value = XPrefs.Asset.GetString("key");
     /// 
-    /// 2.2 本地配置（可写）
+    /// 2.2 本地首选项
     ///     // 写入本地配置
     ///     XPrefs.Local.Set("key", "value");
     ///     XPrefs.Local.Save();
@@ -68,14 +67,36 @@ namespace EFramework.Unity.Utility
     ///     // 读取本地配置
     ///     var value = XPrefs.Local.GetString("key");
     /// 
-    /// 2.3 远端配置（只读）
-    ///     
+    /// 2.3 远端首选项
+    ///     // RemoteHandler 是远端首选项的处理器。
     ///     public class RemoteHandler : XPrefs.IRemote.IHandler
     ///     {
-    ///         // 实现远端配置处理器
+    ///         // Uri 是远端的地址。
+    ///         public string Uri => "http://example.com/config";
+    /// 
+    ///         // OnStarted 是流程启动的回调。
+    ///         public void OnStarted(XPrefs.IRemote context) { }
+    ///         
+    ///         // OnRequest 是预请求的回调。
+    ///         public void OnRequest(XPrefs.IRemote context, UnityWebRequest request) { 
+    ///             request.timeout = 10;
+    ///         }
+    /// 
+    ///         // OnRetry 是错误重试的回调。
+    ///         public bool OnRetry(XPrefs.IRemote context, int count, out float pending)
+    ///         {
+    ///             pending = 1.0f;
+    ///             return count < 3;
+    ///         }
+    /// 
+    ///         // OnSucceeded 是请求成功的回调。
+    ///         public void OnSucceeded(XPrefs.IRemote context) { }
+    /// 
+    ///         // OnFailed 是请求失败的回调。
+    ///         public void OnFailed(XPrefs.IRemote context) { }
     ///     }
     /// 
-    ///     // 读取远端配置
+    ///     // 读取远端首选项
     ///     RunCoroutine(XPrefs.Remote.Read(new RemoteHandler()));
     /// 
     /// 3. 变量求值
@@ -97,7 +118,7 @@ namespace EFramework.Unity.Utility
     ///     var result = XPrefs.Local.Eval("${Preferences.user.name} is ${Preferences.user.age}");
     /// 
     /// 3.3 构建处理
-    ///     支持在构建流程的 `IPreprocessBuildWithReport` 阶段对内置的配置进行变量求值，规则及示例如下：
+    ///     支持在构建流程的 `IPreprocessBuildWithReport` 阶段对资产首选项的配置进行变量求值，规则及示例如下：
     ///     {
     ///         "environment_key": "${Environment.ProjectPath}/Build", // 引用环境变量会被求值
     ///         "preferences_key": "${Preferences.environment_key}",   // 引用配置变量会被求值
@@ -107,14 +128,14 @@ namespace EFramework.Unity.Utility
     /// 
     /// 4. 命令行参数
     /// 
-    /// 4.1 覆盖配置路径
-    ///     --Preferences@Asset=path/to/asset.json    # 覆盖内置配置路径（仅支持编辑器环境）
-    ///     --Preferences@Local=path/to/local.json    # 覆盖本地配置路径
+    /// 4.1 覆盖首选项
+    ///     --Preferences@Asset=path/to/asset.json    # 覆盖资产首选项路径
+    ///     --Preferences@Local=path/to/local.json    # 覆盖本地首选项路径
     /// 
     /// 4.2 覆盖配置值
-    ///     --Preferences@Asset.key=value             # 覆盖内置配置项
-    ///     --Preferences@Local.key=value             # 覆盖本地配置项
-    ///     --Preferences.key=value                   # 覆盖所有配置源
+    ///     --Preferences@Asset.key=value             # 覆盖资产首选项配置
+    ///     --Preferences@Local.key=value             # 覆盖本地首选项配置
+    ///     --Preferences.key=value                   # 覆盖所有首选项配置
     /// 
     /// 5. 自定义编辑器
     /// 
@@ -122,7 +143,35 @@ namespace EFramework.Unity.Utility
     /// 
     ///     public class MyPreferencesEditor : XPrefs.IEditor
     ///     {
-    ///         // 实现自定义编辑器
+    ///         // Section 是配置分组的名称。
+    ///         string XPrefs.IEditor.Section => "MyPreferences";
+    ///         
+    ///         // Tooltip 是配置分组的提示。
+    ///         string XPrefs.IEditor.Tooltip => "This is tooltip of MyPreferences.";
+    ///         
+    ///         // Foldable 表示是否支持折叠。
+    ///         bool XPrefs.IEditor.Foldable => true;
+    /// 
+    ///         // Priority 获取显示的优先级。
+    ///         int XPrefs.IEditor.Priority => 0;
+    /// 
+    ///         // OnActivate 在面板激活时调用。
+    ///         void XPrefs.IEditor.OnActivate(string searchContext, UnityEngine.UIElements.VisualElement rootElement, XPrefs.IBase context) { }
+    ///         
+    ///         // OnVisualize 在面板绘制时调用。
+    ///         void XPrefs.IEditor.OnVisualize(string searchContext, XPrefs.IBase context) { }
+    /// 
+    ///         // OnDeactivate 在面板停用时调用。
+    ///         void XPrefs.IEditor.OnDeactivate(XPrefs.IBase context) { }
+    /// 
+    ///         // OnSave 在保存配置时调用。
+    ///         bool XPrefs.IEditor.OnSave(XPrefs.IBase context) { return true; }
+    /// 
+    ///         // OnApply 在应用配置时调用。
+    ///         bool XPrefs.IEditor.OnApply(XPrefs.IBase context) { return true; }
+    /// 
+    ///         // OnBuild 在项目构建时调用。
+    ///         bool XPrefs.IEditor.OnBuild(XPrefs.IBase context) { return true; }
     ///     }
     /// 
     /// </code>
@@ -929,11 +978,11 @@ namespace EFramework.Unity.Utility
     }
     #endregion
 
-    #region 内置配置（只读）
+    #region 资产首选项
     public partial class XPrefs
     {
         /// <summary>
-        /// IAsset 是内置配置类，用于管理打包在应用程序中的只读配置。
+        /// IAsset 是资产首选项类，用于管理打包在应用程序中的只读首选项。
         /// </summary>
         public partial class IAsset : IBase
 #if UNITY_EDITOR
@@ -941,7 +990,7 @@ namespace EFramework.Unity.Utility
 #endif
         {
             /// <summary>
-            /// Uri 是配置文件的路径。
+            /// Uri 是首选项文件的路径。
             /// 编辑器环境优先返回环境变量中设置的 Preferences@Asset 字段，其次返回 EditorPrefs 持久化的值。
             /// 运行时环境下返回 XEnv.AssetPath 目录下的 Preferences.json 文件。
             /// </summary>
@@ -1204,7 +1253,7 @@ namespace EFramework.Unity.Utility
 
         internal static IAsset asset;
         /// <summary>
-        /// Asset 是内置的配置（只读）。
+        /// Asset 是资产首选项的实例。
         /// </summary>
         public static IAsset Asset
         {
@@ -1221,16 +1270,16 @@ namespace EFramework.Unity.Utility
     }
     #endregion
 
-    #region 本地配置（可写）
+    #region 本地首选项
     public partial class XPrefs
     {
         /// <summary>
-        /// ILocal 是本地配置类，用于管理本地可写配置。
+        /// ILocal 是本地首选项类，用于管理本地可写首选项。
         /// </summary>
         public partial class ILocal : IBase
         {
             /// <summary>
-            /// Uri 是配置文件的路径。
+            /// Uri 是首选项文件的路径。
             /// 优先返回环境变量中设置的 Preferences@Local 字段，其次返回 XEnv.LocalPath 目录下的 Preferences.json 文件。
             /// </summary>
             public static string Uri
@@ -1292,7 +1341,7 @@ namespace EFramework.Unity.Utility
 
         internal static ILocal local;
         /// <summary>
-        /// Local 是本地的配置（可写）。
+        /// Local 是本地首选项的实例。
         /// </summary>
         public static ILocal Local
         {
@@ -1316,11 +1365,11 @@ namespace EFramework.Unity.Utility
     }
     #endregion
 
-    #region 远端配置（只读）
+    #region 远端首选项
     public partial class XPrefs
     {
         /// <summary>
-        /// IRemote 是远端配置类，用于管理从远端服务器获取的配置。
+        /// IRemote 是远端首选项类，用于管理从远端服务器获取的配置。
         /// </summary>
         public partial class IRemote : IBase
         {
@@ -1436,13 +1485,13 @@ namespace EFramework.Unity.Utility
 
         internal static IRemote remote;
         /// <summary>
-        /// Remote 是远端的配置（只读）。
+        /// Remote 是远端首选项的实例。
         /// </summary>
         public static IRemote Remote { get => remote ??= new IRemote(); }
     }
     #endregion
 
-    #region 公开接口（静态）
+    #region 全局共享接口
     public partial class XPrefs
     {
         /// <summary>
@@ -1633,11 +1682,11 @@ namespace EFramework.Unity.Utility
     }
     #endregion
 
-    #region 编辑工具
+    #region 编辑器工具
     public partial class XPrefs
     {
         /// <summary>
-        /// IEditor 是配置的编辑器接口，规范了配置的可视化、校验、保存、应用等行为。
+        /// IEditor 是首选项的编辑器接口，规范了配置的可视化、校验、保存、应用等行为。
         /// </summary>
         public interface IEditor
         {

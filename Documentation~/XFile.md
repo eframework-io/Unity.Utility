@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XFile 提供了文件系统操作功能，支持文件和目录的基本操作、路径处理、压缩解压和文件校验。
+简化了对文件和目录的基本操作，支持路径归一化、解压缩文件、文件校验等功能。
 
 ## 功能特性
 

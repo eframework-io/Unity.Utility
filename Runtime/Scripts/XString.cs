@@ -13,7 +13,7 @@ using UnityEngine;
 namespace EFramework.Unity.Utility
 {
     /// <summary>
-    /// XString 是一个高效的字符串工具类，实现了字符串处理、数值转换、加密解密和变量求值等功能。
+    /// XString 实现了文本处理、数值转换、加密解密和变量求值等功能，是一个高效的字符串工具类。
     /// </summary>
     /// <remarks>
     /// <code>

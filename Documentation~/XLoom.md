@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XLoom 提供了一个统一的协程、线程和定时器管理工具，支持多线程任务调度、定时任务执行和协程管理。
+提供了一个统一的协程、线程和定时器管理工具，支持多线程任务调度、定时任务执行和协程管理。
 
 ## 功能特性
 

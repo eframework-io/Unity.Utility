@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XPool 提供了一个对象缓存工具集，实现了基础对象池、Unity 游戏对象池和字节流缓冲池。
+提供了一个对象缓存工具集，实现了基础对象池、Unity 游戏对象池和字节流缓冲池。
 
 ## 功能特性
 

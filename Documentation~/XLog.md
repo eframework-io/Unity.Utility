@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XLog 提供了一个遵循 RFC5424 标准的日志系统，支持多级别日志输出、多适配器管理、日志轮转和结构化标签等特性。
+提供了一个遵循 RFC5424 标准的日志系统，支持多适配器管理、日志轮转和结构化标签等特性。
 
 ## 功能特性
 

@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XTime 提供了一组时间常量定义及工具函数，支持时间戳转换和格式化等功能。
+提供了一组时间常量定义及工具函数，支持时间戳转换和格式化等功能。
 
 ## 功能特性
 

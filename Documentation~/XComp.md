@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XComp 提供了一组 Unity 游戏对象和组件操作的扩展工具集，用于简化节点操作和组件管理。
+提供了一组 Unity 游戏对象和组件操作的扩展工具集，用于简化节点操作和组件管理。
 
 ## 功能特性
 

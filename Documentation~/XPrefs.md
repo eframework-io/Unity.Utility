@@ -5,18 +5,18 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XPrefs 是一个灵活高效的配置系统，实现了多源化配置的读写，支持自定义编辑器、变量求值和命令行参数覆盖等功能。
+实现了多源化配置的读写，支持可视化编辑、变量求值和命令行参数覆盖等功能，是一个灵活高效的首选项系统。
 
 ## 功能特性
 
-- 多源化配置：支持内置配置（只读）、本地配置（可写）和远端配置（只读），支持多个配置源按优先级顺序读取
+- 多源化配置：支持资产、本地、远端首选项的多源化解析，按顺序优先级获取配置项
 - 多数据类型：支持基础类型（整数、浮点数、布尔值、字符串）、数组类型及配置实例（IBase）
-- 变量求值：支持通过命令行参数动态覆盖配置项，使用 ${Preferences.Key} 语法引用其他配置项
+- 变量求值：支持命令行参数覆盖配置项，使用 ${Preferences.Key} 语法引用其他配置项
 - 自定义编辑器：通过自定义编辑器实现可视化编辑，支持在保存、应用和构建流程中注入自定义逻辑
 
 ## 使用手册
 
-### 1. 基础配置操作
+### 1. 基础操作
 
 #### 1.1 检查配置项
 ```csharp
@@ -52,13 +52,12 @@ var stringArray = XPrefs.GetStrings("stringArray");
 
 ### 2. 配置源管理
 
-#### 2.1 内置配置（只读）
+#### 2.1 资产首选项
 ```csharp
-// 读取内置配置
 var value = XPrefs.Asset.GetString("key");
 ```
 
-#### 2.2 本地配置（可写）
+#### 2.2 本地首选项
 ```csharp
 // 写入本地配置
 XPrefs.Local.Set("key", "value");
@@ -68,9 +67,9 @@ XPrefs.Local.Save();
 var value = XPrefs.Local.GetString("key");
 ```
 
-#### 2.3 远端配置（只读）
+#### 2.3 远端首选项
 ```csharp
-// 实现远端配置处理器
+// RemoteHandler 是远端首选项的处理器。
 public class RemoteHandler : XPrefs.IRemote.IHandler
 {
     // Uri 是远端的地址。
@@ -98,7 +97,7 @@ public class RemoteHandler : XPrefs.IRemote.IHandler
     public void OnFailed(XPrefs.IRemote context) { }
 }
 
-// 读取远端配置
+// 读取远端首选项
 RunCoroutine(XPrefs.Remote.Read(new RemoteHandler()));
 ```
 
@@ -126,7 +125,7 @@ var result = XPrefs.Local.Eval("${Preferences.user.name} is ${Preferences.user.a
 
 #### 3.3 构建处理
 
-支持在构建流程的 `IPreprocessBuildWithReport` 阶段对内置的配置进行变量求值，规则及示例如下：
+支持在构建流程的 `IPreprocessBuildWithReport` 阶段对资产首选项的配置进行变量求值，规则及示例如下：
 
 ```json
 {
@@ -139,17 +138,17 @@ var result = XPrefs.Local.Eval("${Preferences.user.name} is ${Preferences.user.a
 
 ### 4. 命令行参数
 
-#### 4.1 覆盖配置路径
+#### 4.1 覆盖首选项
 ```bash
---Preferences@Asset=path/to/asset.json    # 覆盖内置配置路径（仅支持编辑器环境）
---Preferences@Local=path/to/local.json    # 覆盖本地配置路径
+--Preferences@Asset=path/to/asset.json    # 覆盖资产首选项路径
+--Preferences@Local=path/to/local.json    # 覆盖本地首选项路径
 ```
 
 #### 4.2 覆盖配置值
 ```bash
---Preferences@Asset.key=value             # 覆盖内置配置项
---Preferences@Local.key=value             # 覆盖本地配置项
---Preferences.key=value                   # 覆盖所有配置源
+--Preferences@Asset.key=value             # 覆盖资产首选项配置
+--Preferences@Local.key=value             # 覆盖本地首选项配置
+--Preferences.key=value                   # 覆盖所有首选项配置
 ```
 
 ### 5. 自定义编辑器
@@ -193,17 +192,17 @@ public class MyPreferencesEditor : XPrefs.IEditor
 
 ## 常见问题
 
-### 1. 配置无法保存
+### 1. 首选项配置无法保存？
 - 检查配置对象是否可写（writable = true）。
 - 确认文件路径有效且具有写入权限。
 - 验证是否调用了 Save() 方法。
 
-### 2. 变量替换失败
+### 2. 首选项变量替换失败？
 - 确认变量引用格式正确（${Preferences.key}）。
 - 检查引用的配置项是否存在。
 - 注意避免循环引用和嵌套引用。
 
-### 3. 远端配置加载失败
+### 3. 远端首选项请求失败？
 - 检查网络连接是否正常。
 - 确认远端服务器地址正确。
 - 验证超时和重试参数设置。

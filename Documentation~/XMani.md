@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XMani 提供了一个文件清单管理工具，支持文件清单的生成、解析、对比等功能。
+提供了一个文件清单管理工具，支持文件清单的生成、解析、对比等功能。
 
 ## 功能特性
 

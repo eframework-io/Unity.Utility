@@ -5,7 +5,7 @@
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-XObject 提供了一个对象序列化工具集，实现了结构体与字节数组的转换、对象的 JSON 序列化等功能。
+提供了一个对象序列化工具集，实现了结构体与字节数组的转换、对象的 JSON 序列化等功能。
 
 ## 功能特性
 

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace EFramework.Unity.Utility
 {
     /// <summary>
-    /// XEvent 是一个轻量级的事件管理器，支持多重监听、单次及泛型回调和批量通知等功能。
+    /// XEvent 提供了轻量级的事件管理器，支持多重监听、单次及泛型回调和批量通知等功能。
     /// </summary>
     /// <remarks>
     /// <code>

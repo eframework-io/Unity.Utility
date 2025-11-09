@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 namespace EFramework.Unity.Utility
 {
     /// <summary>
-    /// XLog 提供了一个遵循 RFC5424 标准的日志系统，支持多级别日志输出、多适配器管理、日志轮转和结构化标签等特性。
+    /// XLog 提供了一个遵循 RFC5424 标准的日志系统，支持多适配器管理、日志轮转和结构化标签等特性。
     /// </summary>
     /// <remarks>
     /// <code>

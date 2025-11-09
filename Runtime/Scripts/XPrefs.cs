@@ -286,7 +286,7 @@ namespace EFramework.Unity.Utility
                 if (!string.IsNullOrEmpty(Error))
                 {
                     if (string.IsNullOrEmpty(File)) XLog.Error($"XPrefs.IBase.Read: {Error}");
-                    else XLog.Error($"XPrefs.IBase.Read: load <a href=\"file:///{Path.GetFullPath(File)}\">{Path.GetRelativePath(XEnv.ProjectPath, File)}</a> with error: {Error}");
+                    else XLog.Error($"XPrefs.IBase.Read: load <a href=\"file:///{Path.GetFullPath(File)}\">{Path.GetRelativePath(XEnv.LocalPath, File)}</a> with error: {Error}");
                 }
                 return string.IsNullOrEmpty(Error);
             }
@@ -401,7 +401,7 @@ namespace EFramework.Unity.Utility
                         if (editor == null) continue;
                         if (!editor.OnSave(this))
                         {
-                            XLog.Error("XPrefs.IBase.Save: save preferences to <a href=\"file:///{0}\">{1}</a> failed: {2} handle error.", Path.GetFullPath(File), Path.GetRelativePath(XEnv.ProjectPath, File), editor.GetType().FullName);
+                            XLog.Error("XPrefs.IBase.Save: save preferences to <a href=\"file:///{0}\">{1}</a> failed: {2} handle error.", Path.GetFullPath(File), Path.GetRelativePath(XEnv.LocalPath, File), editor.GetType().FullName);
                             return false;
                         }
                     }
@@ -409,7 +409,7 @@ namespace EFramework.Unity.Utility
                     Dirty = false;
                     var text = Json(pretty, sort);
                     XFile.SaveText(File, encrypt ? XString.Encrypt(text) : text);
-                    XLog.Notice("XPrefs.IBase.Save: save preferences to <a href=\"file:///{0}\">{1}</a> succeeded.", Path.GetFullPath(File), Path.GetRelativePath(XEnv.ProjectPath, File));
+                    XLog.Notice("XPrefs.IBase.Save: save preferences to <a href=\"file:///{0}\">{1}</a> succeeded.", Path.GetFullPath(File), Path.GetRelativePath(XEnv.LocalPath, File));
                     return true;
                 }
             }
@@ -1034,11 +1034,11 @@ namespace EFramework.Unity.Utility
                     if (editor == null) continue;
                     if (!editor.OnApply(this))
                     {
-                        XLog.Error("XPrefs.IAsset.Read: apply preferences of <a href=\"file:///{0}\">{1}</a> failed: {2} handle error.", Path.GetFullPath(file), Path.GetRelativePath(XEnv.ProjectPath, file), editor.GetType().FullName);
+                        XLog.Error("XPrefs.IAsset.Read: apply preferences of <a href=\"file:///{0}\">{1}</a> failed: {2} handle error.", Path.GetFullPath(file), Path.GetRelativePath(XEnv.LocalPath, file), editor.GetType().FullName);
                         return false;
                     }
                 }
-                XLog.Notice("XPrefs.IAsset.Read: apply preferences of <a href=\"file:///{0}\">{1}</a> succeeded.", Path.GetFullPath(file), Path.GetRelativePath(XEnv.ProjectPath, file));
+                XLog.Notice("XPrefs.IAsset.Read: apply preferences of <a href=\"file:///{0}\">{1}</a> succeeded.", Path.GetFullPath(file), Path.GetRelativePath(XEnv.LocalPath, file));
 #endif
                 return true;
             }
@@ -1067,11 +1067,11 @@ namespace EFramework.Unity.Utility
                     if (editor == null) continue;
                     if (!editor.OnApply(this))
                     {
-                        XLog.Error("XPrefs.IAsset.Save: apply preferences of <a href=\"file:///{0}\">{1}</a> failed: {2} handle error.", Path.GetFullPath(File), Path.GetRelativePath(XEnv.ProjectPath, File), editor.GetType().FullName);
+                        XLog.Error("XPrefs.IAsset.Save: apply preferences of <a href=\"file:///{0}\">{1}</a> failed: {2} handle error.", Path.GetFullPath(File), Path.GetRelativePath(XEnv.LocalPath, File), editor.GetType().FullName);
                         return false;
                     }
                 }
-                XLog.Notice("XPrefs.IAsset.Save: apply preferences of <a href=\"file:///{0}\">{1}</a> succeeded.", Path.GetFullPath(File), Path.GetRelativePath(XEnv.ProjectPath, File));
+                XLog.Notice("XPrefs.IAsset.Save: apply preferences of <a href=\"file:///{0}\">{1}</a> succeeded.", Path.GetFullPath(File), Path.GetRelativePath(XEnv.LocalPath, File));
                 return true;
             }
 #endif

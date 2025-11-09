@@ -316,7 +316,7 @@ namespace EFramework.Unity.Utility
                 if (!www)
                 {
                     done = true;
-                    XLog.Notice("XMani.Manifest.Read: loading <a href=\"file:///{0}\">{1}</a>.", Path.GetFullPath(uri), Path.GetRelativePath(XEnv.ProjectPath, uri));
+                    XLog.Notice("XMani.Manifest.Read: loading <a href=\"file:///{0}\">{1}</a>.", Path.GetFullPath(uri), Path.GetRelativePath(XEnv.LocalPath, uri));
 
                     if (string.IsNullOrEmpty(uri)) Error = "Null file for reading mainfest.";
                     else if (!XFile.HasFile(uri)) Error = $"Non exist file {uri} for reading mainfest.";

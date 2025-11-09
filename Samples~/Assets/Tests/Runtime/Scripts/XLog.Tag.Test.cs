@@ -21,40 +21,40 @@ public class TestXLogTag
         tag.Set("key1", "value1");
         tag.Set("key2", "value2");
 
-        Assert.AreEqual("value1", tag.Get("key1"), "期望 key1 的值为 'value1'");
-        Assert.AreEqual("value2", tag.Get("key2"), "期望 key2 的值为 'value2'");
-        Assert.AreEqual("", tag.Get("nonexistent"), "期望不存在的键返回空字符串");
+        Assert.That(tag.Get("key1"), Is.EqualTo("value1"), "期望 key1 的值为 'value1'");
+        Assert.That(tag.Get("key2"), Is.EqualTo("value2"), "期望 key2 的值为 'value2'");
+        Assert.That(tag.Get("nonexistent"), Is.EqualTo(""), "期望不存在的键返回空字符串");
 
         // 测试文本格式化
-        Assert.AreEqual("[key1=value1, key2=value2]", tag.Text, "期望标签文本格式正确");
+        Assert.That(tag.Text, Is.EqualTo("[key1=value1, key2=value2]"), "期望标签文本格式正确");
 
         // 测试数据字典
         var data = tag.Data;
-        Assert.AreEqual(2, data.Count, "期望字典包含2个键值对");
-        Assert.AreEqual("value1", data["key1"], "期望字典中 key1 的值为 'value1'");
-        Assert.AreEqual("value2", data["key2"], "期望字典中 key2 的值为 'value2'");
+        Assert.That(data.Count, Is.EqualTo(2), "期望字典包含2个键值对");
+        Assert.That(data["key1"], Is.EqualTo("value1"), "期望字典中 key1 的值为 'value1'");
+        Assert.That(data["key2"], Is.EqualTo("value2"), "期望字典中 key2 的值为 'value2'");
 
         // 测试日志级别
         tag.Level = XLog.LevelType.Debug;
-        Assert.AreEqual(XLog.LevelType.Debug, tag.Level, "期望日志级别设置为 Debug");
+        Assert.That(tag.Level, Is.EqualTo(XLog.LevelType.Debug), "期望日志级别设置为 Debug");
 
         tag.Level = XLog.LevelType.Info;
-        Assert.AreEqual(XLog.LevelType.Info, tag.Level, "期望日志级别设置为 Info");
+        Assert.That(tag.Level, Is.EqualTo(XLog.LevelType.Info), "期望日志级别设置为 Info");
 
         // 测试克隆功能
         var clonedTag = tag.Clone();
-        Assert.AreEqual("value1", clonedTag.Get("key1"), "期望克隆标签包含原始标签的 key1 值");
-        Assert.AreEqual("value2", clonedTag.Get("key2"), "期望克隆标签包含原始标签的 key2 值");
-        Assert.AreEqual(tag.Text, clonedTag.Text, "期望克隆标签的文本表示与原始标签相同");
+        Assert.That(clonedTag.Get("key1"), Is.EqualTo("value1"), "期望克隆标签包含原始标签的 key1 值");
+        Assert.That(clonedTag.Get("key2"), Is.EqualTo("value2"), "期望克隆标签包含原始标签的 key2 值");
+        Assert.That(clonedTag.Text, Is.EqualTo(tag.Text), "期望克隆标签的文本表示与原始标签相同");
 
         clonedTag.Set("key3", "value3");
-        Assert.AreEqual("", tag.Get("key3"), "期望原始标签不受克隆标签修改的影响");
-        Assert.AreEqual("value3", clonedTag.Get("key3"), "期望克隆标签可以独立设置新的键值对");
+        Assert.That(tag.Get("key3"), Is.EqualTo(""), "期望原始标签不受克隆标签修改的影响");
+        Assert.That(clonedTag.Get("key3"), Is.EqualTo("value3"), "期望克隆标签可以独立设置新的键值对");
 
         // 测试空标签
         var emptyTag = XLog.GetTag();
-        Assert.AreEqual("", emptyTag.Text, "期望空标签的文本表示为空字符串");
-        Assert.AreEqual(0, emptyTag.Data.Count, "期望空标签的字典为空");
+        Assert.That(emptyTag.Text, Is.EqualTo(""), "期望空标签的文本表示为空字符串");
+        Assert.That(emptyTag.Data.Count, Is.EqualTo(0), "期望空标签的字典为空");
 
         // 清理资源
         XLog.PutTag(tag);
@@ -85,14 +85,14 @@ public class TestXLogTag
                     // 验证每个线程都能获取到自己的tag
                     var myTag = XLog.Tag();
                     Assert.That(myTag, Is.SameAs(tag));
-                    Assert.AreEqual($"thread_{threadId}", myTag.Get("thread"));
+                    Assert.That(myTag.Get("thread"), Is.EqualTo($"thread_{threadId}"));
 
                     // 添加更多的键值对，验证不会影响其他线程
                     myTag = XLog.Tag("key1", $"value1_{threadId}", "key2", $"value2_{threadId}");
                     Assert.That(myTag, Is.SameAs(tag));
-                    Assert.AreEqual($"thread_{threadId}", myTag.Get("thread"));
-                    Assert.AreEqual($"value1_{threadId}", myTag.Get("key1"));
-                    Assert.AreEqual($"value2_{threadId}", myTag.Get("key2"));
+                    Assert.That(myTag.Get("thread"), Is.EqualTo($"thread_{threadId}"));
+                    Assert.That(myTag.Get("key1"), Is.EqualTo($"value1_{threadId}"));
+                    Assert.That(myTag.Get("key2"), Is.EqualTo($"value2_{threadId}"));
 
                     // 清理当前线程的tag
                     XLog.Defer();

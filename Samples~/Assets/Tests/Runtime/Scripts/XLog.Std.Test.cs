@@ -36,15 +36,15 @@ public class TestXLogStd
     public void Initialize()
     {
         // 测试默认配置
-        Assert.AreEqual(XLog.LevelType.Info, adapter.Initialize(preferences), "期望默认日志级别为 Info");
+        Assert.That(adapter.Initialize(preferences), Is.EqualTo(XLog.LevelType.Info), "期望默认日志级别为 Info");
 
         // 测试自定义日志级别
         preferences.Set(XLog.StdAdapter.Preferences.Level, XLog.LevelType.Debug.ToString());
-        Assert.AreEqual(XLog.LevelType.Debug, adapter.Initialize(preferences), "期望自定义日志级别设置为 Debug");
+        Assert.That(adapter.Initialize(preferences), Is.EqualTo(XLog.LevelType.Debug), "期望自定义日志级别设置为 Debug");
 
         // 测试无效日志级别
         preferences.Set(XLog.StdAdapter.Preferences.Level, "InvalidLevel");
-        Assert.AreEqual(XLog.LevelType.Undefined, adapter.Initialize(preferences), "期望无效日志级别返回 Undefined");
+        Assert.That(adapter.Initialize(preferences), Is.EqualTo(XLog.LevelType.Undefined), "期望无效日志级别返回 Undefined");
     }
 
     [Test]

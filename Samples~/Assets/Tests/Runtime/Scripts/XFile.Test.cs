@@ -51,8 +51,8 @@ public class TestXFile
         var size = XFile.FileSize(testFilePath);
 
         // Assert
-        Assert.AreEqual(content.Length, size, "文件大小应该与内容长度相等");
-        Assert.AreEqual(-1, XFile.FileSize("nonexistent.txt"), "不存在的文件应返回 -1");
+        Assert.That(size, Is.EqualTo(content.Length), "文件大小应该与内容长度相等");
+        Assert.That(XFile.FileSize("nonexistent.txt"), Is.EqualTo(-1), "不存在的文件应返回 -1");
     }
 
     [Test]
@@ -62,8 +62,8 @@ public class TestXFile
         XFile.SaveText(testFilePath, "Test content");
 
         // Assert
-        Assert.IsTrue(XFile.HasFile(testFilePath), "应能检测到已创建的文件");
-        Assert.IsFalse(XFile.HasFile(XFile.PathJoin(testDirectoryPath, "NonExistingFile.txt")), "不存在的文件应返回 false");
+        Assert.That(XFile.HasFile(testFilePath), Is.True, "应能检测到已创建的文件");
+        Assert.That(XFile.HasFile(XFile.PathJoin(testDirectoryPath, "NonExistingFile.txt")), Is.False, "不存在的文件应返回 false");
     }
 
     [Test]
@@ -77,7 +77,7 @@ public class TestXFile
         var result = XFile.OpenText(testFilePath);
 
         // Assert
-        Assert.AreEqual(content, result, "读取的文本内容应与写入的内容完全一致");
+        Assert.That(result, Is.EqualTo(content), "读取的文本内容应与写入的内容完全一致");
     }
 
     [Test]
@@ -91,8 +91,8 @@ public class TestXFile
         var result = XFile.OpenFile(testFilePath);
 
         // Assert
-        Assert.AreEqual(content.Length, result.Length, "读取的文件长度应与原始内容长度相等");
-        Assert.AreEqual(content, result, "读取的文件内容应与原始内容完全一致");
+        Assert.That(result.Length, Is.EqualTo(content.Length), "读取的文件长度应与原始内容长度相等");
+        Assert.That(result, Is.EqualTo(content), "读取的文件内容应与原始内容完全一致");
     }
 
     [Test]
@@ -105,9 +105,9 @@ public class TestXFile
         var result = XFile.SaveText(testFilePath, content);
 
         // Assert
-        Assert.IsTrue(result, "保存文本操作应成功完成");
-        Assert.IsTrue(XFile.HasFile(testFilePath), "文件应成功创建");
-        Assert.AreEqual(content, XFile.OpenText(testFilePath), "保存的内容应与原始内容一致");
+        Assert.That(result, Is.True, "保存文本操作应成功完成");
+        Assert.That(XFile.HasFile(testFilePath), Is.True, "文件应成功创建");
+        Assert.That(XFile.OpenText(testFilePath), Is.EqualTo(content), "保存的内容应与原始内容一致");
     }
 
     [Test]
@@ -120,7 +120,7 @@ public class TestXFile
         XFile.DeleteFile(testFilePath);
 
         // Assert
-        Assert.IsFalse(XFile.HasFile(testFilePath), "文件应被成功删除");
+        Assert.That(XFile.HasFile(testFilePath), Is.False, "文件应被成功删除");
     }
 
     [Test]
@@ -135,8 +135,8 @@ public class TestXFile
         XFile.CopyFile(testFilePath, copyFilePath);
 
         // Assert
-        Assert.IsTrue(XFile.HasFile(copyFilePath), "目标文件应成功创建");
-        Assert.AreEqual("Test content", XFile.OpenText(copyFilePath), "复制的文件内容应与源文件一致");
+        Assert.That(XFile.HasFile(copyFilePath), Is.True, "目标文件应成功创建");
+        Assert.That(XFile.OpenText(copyFilePath), Is.EqualTo("Test content"), "复制的文件内容应与源文件一致");
     }
 
     [Test]
@@ -146,8 +146,8 @@ public class TestXFile
         XFile.CreateDirectory(testDirectoryPath);
 
         // Assert
-        Assert.IsTrue(XFile.HasDirectory(testDirectoryPath), "应能检测到已创建的目录");
-        Assert.IsFalse(XFile.HasDirectory("NonExistingDirectory"), "不存在的目录应返回 false");
+        Assert.That(XFile.HasDirectory(testDirectoryPath), Is.True, "应能检测到已创建的目录");
+        Assert.That(XFile.HasDirectory("NonExistingDirectory"), Is.False, "不存在的目录应返回 false");
     }
 
     [Test]
@@ -162,8 +162,8 @@ public class TestXFile
         var result = XFile.DeleteDirectory(testDirectoryPath);
 
         // Assert
-        Assert.IsTrue(result, "目录删除操作应成功完成");
-        Assert.IsFalse(XFile.HasDirectory(testDirectoryPath), "目录应被成功删除");
+        Assert.That(result, Is.True, "目录删除操作应成功完成");
+        Assert.That(XFile.HasDirectory(testDirectoryPath), Is.False, "目录应被成功删除");
     }
 
     [Test]
@@ -173,7 +173,7 @@ public class TestXFile
         XFile.CreateDirectory(testDirectoryPath);
 
         // Assert
-        Assert.IsTrue(Directory.Exists(testDirectoryPath), "目录应被成功创建");
+        Assert.That(Directory.Exists(testDirectoryPath), Is.True, "目录应被成功创建");
     }
 
     [Test]
@@ -237,35 +237,35 @@ public class TestXFile
     public void NormalizePath()
     {
         // 测试基本路径转换
-        Assert.AreEqual("C:/TestFile.txt", XFile.NormalizePath("C:\\Users\\..\\TestFile.txt"), "反斜杠应被转换为正斜杠，且相对路径应被解析");
+        Assert.That(XFile.NormalizePath("C:\\Users\\..\\TestFile.txt"), Is.EqualTo("C:/TestFile.txt"), "反斜杠应被转换为正斜杠，且相对路径应被解析");
 
         // 测试特殊前缀
-        Assert.AreEqual("file://path/to/file", XFile.NormalizePath("file://path\\to\\file"), "特殊前缀应被保留，路径分隔符应被统一");
-        Assert.AreEqual("jar:file://path/to/file", XFile.NormalizePath("jar:file://path\\to\\file"), "JAR文件路径应被正确处理");
+        Assert.That(XFile.NormalizePath("file://path\\to\\file"), Is.EqualTo("file://path/to/file"), "特殊前缀应被保留，路径分隔符应被统一");
+        Assert.That(XFile.NormalizePath("jar:file://path\\to\\file"), Is.EqualTo("jar:file://path/to/file"), "JAR文件路径应被正确处理");
 
         // 测试点和双点
-        Assert.AreEqual("path/file", XFile.NormalizePath("path/./file"), "当前目录符号应被正确处理");
-        Assert.AreEqual("path", XFile.NormalizePath("path/file/.."), "父目录符号应被正确处理");
+        Assert.That(XFile.NormalizePath("path/./file"), Is.EqualTo("path/file"), "当前目录符号应被正确处理");
+        Assert.That(XFile.NormalizePath("path/file/.."), Is.EqualTo("path"), "父目录符号应被正确处理");
     }
 
     [Test]
     public void PathJoin()
     {
         // 测试基本路径合并
-        Assert.AreEqual("path/to/file", XFile.PathJoin("path", "to", "file"), "多个路径段应被正确合并");
+        Assert.That(XFile.PathJoin("path", "to", "file"), Is.EqualTo("path/to/file"), "多个路径段应被正确合并");
 
         // 测试带斜杠的路径合并
-        Assert.AreEqual("path/to/file", XFile.PathJoin("path/", "/to/", "/file"), "重复的路径分隔符应被正确处理");
+        Assert.That(XFile.PathJoin("path/", "/to/", "/file"), Is.EqualTo("path/to/file"), "重复的路径分隔符应被正确处理");
 
         // 测试空路径
-        Assert.AreEqual("", XFile.PathJoin(), "空参数应返回空字符串");
+        Assert.That(XFile.PathJoin(), Is.EqualTo(""), "空参数应返回空字符串");
 
         // 测试单个路径
-        Assert.AreEqual("path", XFile.PathJoin("path"), "单个路径应保持不变");
+        Assert.That(XFile.PathJoin("path"), Is.EqualTo("path"), "单个路径应保持不变");
 
         // 测试带点和双点的路径
-        Assert.AreEqual("path/file", XFile.PathJoin("path/./file"), "当前目录符号应被正确处理");
-        Assert.AreEqual("file", XFile.PathJoin("path/../file"), "父目录符号应被正确处理");
+        Assert.That(XFile.PathJoin("path/./file"), Is.EqualTo("path/file"), "当前目录符号应被正确处理");
+        Assert.That(XFile.PathJoin("path/../file"), Is.EqualTo("file"), "父目录符号应被正确处理");
     }
 
     [Test]
@@ -333,11 +333,7 @@ public class TestXFile
         // 等待异步操作完成，设置20秒超时
         var timeoutTask = Task.Delay(20000);
         Task.WaitAny(tcs.Task, timeoutTask);
-
-        if (!tcs.Task.IsCompleted)
-        {
-            Assert.Fail("解压操作超时（20秒）");
-        }
+        Assert.That(tcs.Task.IsCompleted, Is.True, "解压操作超时（20秒）");
     }
 
     [Test]

@@ -19,15 +19,15 @@ public class TestXPrefs
         {
             var preferences = new XPrefs.IBase();
             // 验证不存在的键返回 false
-            Assert.IsFalse(preferences.Has("nonexistent"), "不存在的键应返回 false");
+            Assert.That(preferences.Has("nonexistent"), Is.False, "不存在的键应返回 false");
 
             // 验证设置和检查键值
             preferences.Set("key", "value");
-            Assert.IsTrue(preferences.Has("key"), "设置后的键应该存在");
+            Assert.That(preferences.Has("key"), Is.True, "设置后的键应该存在");
 
             // 验证移除键值
             preferences.Unset("key");
-            Assert.IsFalse(preferences.Has("key"), "移除后的键应该不存在");
+            Assert.That(preferences.Has("key"), Is.False, "移除后的键应该不存在");
         }
         #endregion
 
@@ -54,7 +54,7 @@ public class TestXPrefs
                     "Float" => preferences.GetFloat(key),
                     _ => null
                 };
-                Assert.AreEqual(expected, result, $"{name} 类型的值应正确存储和读取");
+                Assert.That(result, Is.EqualTo(expected), $"{name} 类型的值应正确存储和读取");
             }
         }
         #endregion
@@ -68,12 +68,12 @@ public class TestXPrefs
             child.Set("arrayKey", new[] { 1, 2, 3 });
 
             // 验证嵌套对象的存储
-            Assert.IsTrue(preferences.Set("childPrefs", child), "应成功存储嵌套的配置对象");
+            Assert.That(preferences.Set("childPrefs", child), Is.True, "应成功存储嵌套的配置对象");
             var retrieved = preferences.Get<XPrefs.IBase>("childPrefs");
-            Assert.IsNotNull(retrieved, "应能获取到嵌套的配置对象");
-            Assert.AreEqual("childValue", retrieved.GetString("stringKey"), "嵌套对象中的字符串值应正确保存");
-            Assert.AreEqual(42, retrieved.GetInt("intKey"), "嵌套对象中的整数值应正确保存");
-            CollectionAssert.AreEqual(new[] { 1, 2, 3 }, retrieved.GetInts("arrayKey"), "嵌套对象中的数组应正确保存");
+            Assert.That(retrieved, Is.Not.Null, "应能获取到嵌套的配置对象");
+            Assert.That(retrieved.GetString("stringKey"), Is.EqualTo("childValue"), "嵌套对象中的字符串值应正确保存");
+            Assert.That(retrieved.GetInt("intKey"), Is.EqualTo(42), "嵌套对象中的整数值应正确保存");
+            Assert.That(retrieved.GetInts("arrayKey"), Is.EqualTo(new[] { 1, 2, 3 }), "嵌套对象中的数组应正确保存");
 
             // 深层嵌套测试
             var grandChild = new XPrefs.IBase();
@@ -81,8 +81,8 @@ public class TestXPrefs
             child.Set("grandChild", grandChild);
 
             var deepRetrieved = preferences.Get<XPrefs.IBase>("childPrefs").Get<XPrefs.IBase>("grandChild");
-            Assert.IsNotNull(deepRetrieved, "应能获取到深层嵌套的配置对象");
-            Assert.AreEqual("deepValue", deepRetrieved.GetString("deepKey"), "深层嵌套对象中的值应正确保存");
+            Assert.That(deepRetrieved, Is.Not.Null, "应能获取到深层嵌套的配置对象");
+            Assert.That(deepRetrieved.GetString("deepKey"), Is.EqualTo("deepValue"), "深层嵌套对象中的值应正确保存");
         }
         #endregion
 
@@ -90,16 +90,16 @@ public class TestXPrefs
         {
             var preferences = new XPrefs.IBase();
             // 验证各种类型的默认值返回
-            Assert.AreEqual("default", preferences.Get("missing", "default"), "缺失的字符串键应返回默认值");
-            Assert.AreEqual(100, preferences.Get("missing", 100), "缺失的整数键应返回默认值");
-            Assert.IsTrue(preferences.Get("missing", true), "缺失的布尔键应返回默认值");
-            Assert.AreEqual(1.23f, preferences.Get("missing", 1.23f), "缺失的浮点数键应返回默认值");
+            Assert.That(preferences.Get("missing", "default"), Is.EqualTo("default"), "缺失的字符串键应返回默认值");
+            Assert.That(preferences.Get("missing", 100), Is.EqualTo(100), "缺失的整数键应返回默认值");
+            Assert.That(preferences.Get("missing", true), Is.True, "缺失的布尔键应返回默认值");
+            Assert.That(preferences.Get("missing", 1.23f), Is.EqualTo(1.23f), "缺失的浮点数键应返回默认值");
 
             // 验证数组类型的默认值返回
-            CollectionAssert.AreEqual(new[] { "default" }, preferences.Get("missing", new[] { "default" }), "缺失的字符串数组键应返回默认数组");
-            CollectionAssert.AreEqual(new[] { 1, 2 }, preferences.Get("missing", new[] { 1, 2 }), "缺失的整数数组键应返回默认数组");
-            CollectionAssert.AreEqual(new[] { 1.1f }, preferences.Get("missing", new[] { 1.1f }), "缺失的浮点数数组键应返回默认数组");
-            CollectionAssert.AreEqual(new[] { true }, preferences.Get("missing", new[] { true }), "缺失的布尔数组键应返回默认数组");
+            Assert.That(preferences.Get("missing", new[] { "default" }), Is.EqualTo(new[] { "default" }), "缺失的字符串数组键应返回默认数组");
+            Assert.That(preferences.Get("missing", new[] { 1, 2 }), Is.EqualTo(new[] { 1, 2 }), "缺失的整数数组键应返回默认数组");
+            Assert.That(preferences.Get("missing", new[] { 1.1f }), Is.EqualTo(new[] { 1.1f }), "缺失的浮点数数组键应返回默认数组");
+            Assert.That(preferences.Get("missing", new[] { true }), Is.EqualTo(new[] { true }), "缺失的布尔数组键应返回默认数组");
         }
         #endregion
 
@@ -126,7 +126,7 @@ public class TestXPrefs
                     "Bool Array" => preferences.GetBools(key),
                     _ => null
                 };
-                CollectionAssert.AreEqual((System.Array)expected, (System.Array)result, $"{name} 类型的数组应正确存储和读取");
+                Assert.That((System.Array)expected, Is.EqualTo((System.Array)result), $"{name} 类型的数组应正确存储和读取");
             }
         }
         #endregion
@@ -157,7 +157,7 @@ public class TestXPrefs
             child2.Set("key", "childValue");
             preferences2.Set("child", child2);
 
-            Assert.IsTrue(preferences1.Equals(preferences2), "具有相同内容的配置对象应该相等");
+            Assert.That(preferences1.Equals(preferences2), Is.True, "具有相同内容的配置对象应该相等");
         }
         #endregion
     }
@@ -190,64 +190,64 @@ public class TestXPrefs
 
             #region 2. HasKey测试
             // 验证键存在检查
-            Assert.IsTrue(XPrefs.HasKey("intKey"), "Asset 配置中应存在 intKey");
-            Assert.IsFalse(XPrefs.HasKey("nonexistentKey"), "不存在的键应返回 false");
-            Assert.IsTrue(XPrefs.HasKey("localIntKey", XPrefs.Local), "Local 配置中应存在 localIntKey");
-            Assert.IsTrue(XPrefs.HasKey("intKey", XPrefs.Local, XPrefs.Asset), "多配置源中应能找到 intKey");
-            Assert.IsFalse(XPrefs.HasKey("nonexistentKey", XPrefs.Local, XPrefs.Asset), "多配置源中不存在的键应返回 false");
+            Assert.That(XPrefs.HasKey("intKey"), Is.True, "Asset 配置中应存在 intKey");
+            Assert.That(XPrefs.HasKey("nonexistentKey"), Is.False, "不存在的键应返回 false");
+            Assert.That(XPrefs.HasKey("localIntKey", XPrefs.Local), Is.True, "Local 配置中应存在 localIntKey");
+            Assert.That(XPrefs.HasKey("intKey", XPrefs.Local, XPrefs.Asset), Is.True, "多配置源中应能找到 intKey");
+            Assert.That(XPrefs.HasKey("nonexistentKey", XPrefs.Local, XPrefs.Asset), Is.False, "多配置源中不存在的键应返回 false");
             #endregion
 
             #region 3. GetInt测试
             // 验证整数值获取
-            Assert.AreEqual(42, XPrefs.GetInt("intKey"), "应正确获取 Asset 中的整数值");
-            Assert.AreEqual(100, XPrefs.GetInt("localIntKey", 0, XPrefs.Local), "应正确获取 Local 中的整数值");
-            Assert.AreEqual(999, XPrefs.GetInt("nonexistentKey", 999, XPrefs.Local, XPrefs.Asset), "获取不存在的键应返回默认值");
-            Assert.AreEqual(3, XPrefs.GetInt("floatKey"), "浮点数应正确转换为整数");
+            Assert.That(XPrefs.GetInt("intKey"), Is.EqualTo(42), "应正确获取 Asset 中的整数值");
+            Assert.That(XPrefs.GetInt("localIntKey", 0, XPrefs.Local), Is.EqualTo(100), "应正确获取 Local 中的整数值");
+            Assert.That(XPrefs.GetInt("nonexistentKey", 999, XPrefs.Local, XPrefs.Asset), Is.EqualTo(999), "获取不存在的键应返回默认值");
+            Assert.That(XPrefs.GetInt("floatKey"), Is.EqualTo(3), "浮点数应正确转换为整数");
             #endregion
 
             #region 4. GetInts测试
             // 验证整数数组获取
-            CollectionAssert.AreEqual(new[] { 1, 2, 3 }, XPrefs.GetInts("intsKey"), "应正确获取 Asset 中的整数数组");
-            CollectionAssert.AreEqual(new[] { 4, 5, 6 }, XPrefs.GetInts("localIntsKey", null, XPrefs.Local), "应正确获取 Local 中的整数数组");
-            CollectionAssert.AreEqual(new[] { 7, 8, 9 }, XPrefs.GetInts("nonexistentKey", new[] { 7, 8, 9 }, XPrefs.Local, XPrefs.Asset), "获取不存在的数组应返回默认值");
+            Assert.That(XPrefs.GetInts("intsKey"), Is.EqualTo(new[] { 1, 2, 3 }), "应正确获取 Asset 中的整数数组");
+            Assert.That(XPrefs.GetInts("localIntsKey", null, XPrefs.Local), Is.EqualTo(new[] { 4, 5, 6 }), "应正确获取 Local 中的整数数组");
+            Assert.That(XPrefs.GetInts("nonexistentKey", new[] { 7, 8, 9 }, XPrefs.Local, XPrefs.Asset), Is.EqualTo(new[] { 7, 8, 9 }), "获取不存在的数组应返回默认值");
             #endregion
 
             #region 5. Get基本类型测试
             // 验证基本类型值获取
-            Assert.AreEqual("assetValue", XPrefs.GetString("stringKey"), "应正确获取字符串值");
-            Assert.AreEqual(3.14f, XPrefs.GetFloat("floatKey"), "应正确获取浮点数值");
-            Assert.IsTrue(XPrefs.GetBool("boolKey"), "应正确获取布尔值");
-            Assert.AreEqual("localOverride", XPrefs.GetString("overrideKey", "", XPrefs.Local, XPrefs.Asset), "Local 配置应覆盖 Asset 配置");
+            Assert.That(XPrefs.GetString("stringKey"), Is.EqualTo("assetValue"), "应正确获取字符串值");
+            Assert.That(XPrefs.GetFloat("floatKey"), Is.EqualTo(3.14f), "应正确获取浮点数值");
+            Assert.That(XPrefs.GetBool("boolKey"), Is.True, "应正确获取布尔值");
+            Assert.That(XPrefs.GetString("overrideKey", "", XPrefs.Local, XPrefs.Asset), Is.EqualTo("localOverride"), "Local 配置应覆盖 Asset 配置");
             #endregion
 
             #region 6. 类型特定测试
             // 验证各种类型的特定方法
-            Assert.AreEqual("assetValue", XPrefs.GetString("stringKey"), "GetString 应正确获取字符串值");
-            Assert.AreEqual("default", XPrefs.GetString("nonexistentKey", "default"), "GetString 应返回默认值");
-            CollectionAssert.AreEqual(new[] { "a", "b", "c" }, XPrefs.GetStrings("stringsKey"), "GetStrings 应正确获取字符串数组");
-            Assert.AreEqual(3.14f, XPrefs.GetFloat("floatKey"), "GetFloat 应正确获取浮点数值");
+            Assert.That(XPrefs.GetString("stringKey"), Is.EqualTo("assetValue"), "GetString 应正确获取字符串值");
+            Assert.That(XPrefs.GetString("nonexistentKey", "default"), Is.EqualTo("default"), "GetString 应返回默认值");
+            Assert.That(XPrefs.GetStrings("stringsKey"), Is.EqualTo(new[] { "a", "b", "c" }), "GetStrings 应正确获取字符串数组");
+            Assert.That(XPrefs.GetFloat("floatKey"), Is.EqualTo(3.14f), "GetFloat 应正确获取浮点数值");
 
             var expectedFloats = new[] { 1.1f, 2.2f, 3.3f };
             var actualFloats = XPrefs.GetFloats("floatsKey");
             for (int i = 0; i < expectedFloats.Length; i++)
             {
-                Assert.AreEqual(expectedFloats[i], actualFloats[i], 0.001f, "GetFloats 应正确获取浮点数数组");
+                Assert.That(actualFloats[i], Is.EqualTo(expectedFloats[i]), "GetFloats 应正确获取浮点数数组");
             }
 
-            Assert.IsTrue(XPrefs.GetBool("boolKey"), "GetBool 应正确获取布尔值");
-            CollectionAssert.AreEqual(new[] { true, false, true }, XPrefs.GetBools("boolsKey"), "GetBools 应正确获取布尔数组");
+            Assert.That(XPrefs.GetBool("boolKey"), Is.True, "GetBool 应正确获取布尔值");
+            Assert.That(XPrefs.GetBools("boolsKey"), Is.EqualTo(new[] { true, false, true }), "GetBools 应正确获取布尔数组");
             #endregion
 
             #region 7. 边界情况测试
             // 验证边界情况
-            Assert.AreEqual(42, XPrefs.GetInt("intKey", 0, null), "空配置源列表应默认使用 Asset");
-            Assert.AreEqual(42, XPrefs.GetInt("intKey", 0), "无配置源应默认使用 Asset");
+            Assert.That(XPrefs.GetInt("intKey", 0, null), Is.EqualTo(42), "空配置源列表应默认使用 Asset");
+            Assert.That(XPrefs.GetInt("intKey", 0), Is.EqualTo(42), "无配置源应默认使用 Asset");
             #endregion
 
             #region 8. 类型不匹配测试
             // 验证类型不匹配情况
             XPrefs.Asset.Set("mismatchKey", "not an int");
-            Assert.AreEqual(0, XPrefs.GetInt("mismatchKey"), "类型不匹配时应返回类型默认值");
+            Assert.That(XPrefs.GetInt("mismatchKey"), Is.EqualTo(0), "类型不匹配时应返回类型默认值");
             #endregion
         }
         finally
@@ -299,34 +299,34 @@ public class TestXPrefs
             #endregion
 
             #region 2. 测试读取配置
-            Assert.IsTrue(preferences.Read(testFile), "Should read file successfully");
+            Assert.That(preferences.Read(testFile), Is.True, "Should read file successfully");
 
             // 验证各种类型的数据
-            Assert.AreEqual("stringValue", preferences.GetString("stringKey"));
-            Assert.AreEqual(123, preferences.GetInt("intKey"));
-            Assert.IsTrue(preferences.GetBool("boolKey"));
-            CollectionAssert.AreEqual(new[] { 1, 2, 3 }, preferences.GetInts("intSliceKey"));
+            Assert.That(preferences.GetString("stringKey"), Is.EqualTo("stringValue"), "Should read string value");
+            Assert.That(preferences.GetInt("intKey"), Is.EqualTo(123), "Should read int value");
+            Assert.That(preferences.GetBool("boolKey"), Is.True, "Should read bool value");
+            Assert.That(preferences.GetInts("intSliceKey"), Is.EqualTo(new[] { 1, 2, 3 }), "Should read ints value");
 
             var expectedFloats = new[] { 1.1f, 2.2f, 3.3f };
             var actualFloats = preferences.GetFloats("floatSliceKey");
             for (int i = 0; i < expectedFloats.Length; i++)
             {
-                Assert.AreEqual(expectedFloats[i], actualFloats[i], 0.001f);
+                Assert.That(actualFloats[i], Is.EqualTo(expectedFloats[i]), "Should read floats value");
             }
 
-            CollectionAssert.AreEqual(new[] { "a", "b", "c" }, preferences.GetStrings("stringSliceKey"));
-            CollectionAssert.AreEqual(new[] { true, false, true }, preferences.GetBools("boolSliceKey"));
+            Assert.That(preferences.GetStrings("stringSliceKey"), Is.EqualTo(new[] { "a", "b", "c" }), "Should read strings value");
+            Assert.That(preferences.GetBools("boolSliceKey"), Is.EqualTo(new[] { true, false, true }), "Should read bools value");
             #endregion
 
             #region 3. 测试读取不存在的文件
             var nonExistentFile = XFile.PathJoin(tmpDir, "nonexistent.json");
-            Assert.IsFalse(preferences.Read(nonExistentFile), "Should fail reading non-existent file");
+            Assert.That(preferences.Read(nonExistentFile), Is.False, "Should fail reading non-existent file");
             #endregion
 
             #region 4. 测试读取无效的JSON
             var invalidFile = XFile.PathJoin(tmpDir, "invalid.json");
             XFile.SaveText(invalidFile, "invalid json");
-            Assert.IsFalse(preferences.Read(invalidFile), "Should fail reading invalid JSON");
+            Assert.That(preferences.Read(invalidFile), Is.False, "Should fail reading invalid JSON");
             #endregion
 
             #region 5. 测试复杂JSON
@@ -344,13 +344,13 @@ public class TestXPrefs
             XFile.SaveText(complexFile, complexData);
 
             var complexPrefs = new XPrefs.IBase();
-            Assert.IsTrue(complexPrefs.Read(complexFile));
+            Assert.That(complexPrefs.Read(complexFile), Is.True, "Should read complex file successfully");
 
-            Assert.IsNull(complexPrefs.Get<object>("nullValue"));
-            Assert.IsNotNull(complexPrefs.Get<XPrefs.IBase>("emptyObject"));
-            Assert.IsNull(complexPrefs.Get<object[]>("emptyArray"));
-            Assert.IsNotNull(complexPrefs.Get<XPrefs.IBase>("nestedObject"));
-            Assert.IsNull(complexPrefs.Get<object[]>("mixedArray"));
+            Assert.That(complexPrefs.Get<object>("nullValue"), Is.Null, "Should get null value");
+            Assert.That(complexPrefs.Get<XPrefs.IBase>("emptyObject"), Is.Not.Null, "Should get empty object");
+            Assert.That(complexPrefs.Get<object[]>("emptyArray"), Is.Null, "Should get empty array");
+            Assert.That(complexPrefs.Get<XPrefs.IBase>("nestedObject"), Is.Not.Null, "Should get nested object");
+            Assert.That(complexPrefs.Get<object[]>("mixedArray"), Is.Null);
             #endregion
 
             #region 6. 测试大文件
@@ -362,11 +362,11 @@ public class TestXPrefs
 
             var largeFile = XFile.PathJoin(tmpDir, "large.json");
             largePrefs.File = largeFile;
-            Assert.IsTrue(largePrefs.Save(), "Should save large file successfully");
+            Assert.That(largePrefs.Save(), Is.True, "Should save large file successfully");
 
             var loadedLargePrefs = new XPrefs.IBase();
-            Assert.IsTrue(loadedLargePrefs.Read(largeFile));
-            Assert.AreEqual("value42", loadedLargePrefs.GetString("key42"));
+            Assert.That(loadedLargePrefs.Read(largeFile), Is.True, "Should read large file successfully");
+            Assert.That(loadedLargePrefs.GetString("key42"), Is.EqualTo("value42"), "Should get value42");
             #endregion
         }
         finally
@@ -389,7 +389,7 @@ public class TestXPrefs
             pf.Set("greeting", "Hello ${Preferences.name}");
 
             var result = pf.Eval("${Preferences.greeting}");
-            Assert.AreEqual("Hello John", result);
+            Assert.That(result, Is.EqualTo("Hello John"), "Should evaluate greeting");
         }
         #endregion
 
@@ -397,7 +397,7 @@ public class TestXPrefs
         {
             var pf = new XPrefs.IBase();
             var result = pf.Eval("${Preferences.missing}");
-            Assert.AreEqual("${Preferences.missing}(Unknown)", result);
+            Assert.That(result, Is.EqualTo("${Preferences.missing}(Unknown)"), "Should evaluate missing");
         }
         #endregion
 
@@ -408,7 +408,7 @@ public class TestXPrefs
             pf.Set("recursive2", "${Preferences.recursive1}");
 
             var result = pf.Eval("${Preferences.recursive1}");
-            Assert.AreEqual("${Preferences.recursive1}(Recursive)", result);
+            Assert.That(result, Is.EqualTo("${Preferences.recursive1}(Recursive)"), "Should evaluate recursive");
         }
         #endregion
 
@@ -418,7 +418,7 @@ public class TestXPrefs
             pf.Set("outer", "value");
 
             var result = pf.Eval("${Preferences.outer${Preferences.inner}}");
-            Assert.AreEqual("${Preferences.outer${Preferences.inner}(Nested)}", result);
+            Assert.That(result, Is.EqualTo("${Preferences.outer${Preferences.inner}(Nested)}"), "Should evaluate nested");
         }
         #endregion
 
@@ -433,7 +433,7 @@ public class TestXPrefs
             pf.Set("child", child);
 
             var result = pf.Eval("${Preferences.first} and ${Preferences.last} has a child named ${Preferences.child.name} age ${Preferences.child.age}");
-            Assert.AreEqual("John and Doe has a child named Mike age ${Preferences.child.age}(Unknown)", result);
+            Assert.That(result, Is.EqualTo("John and Doe has a child named Mike age ${Preferences.child.age}(Unknown)"), "Should evaluate multiple");
         }
         #endregion
 
@@ -443,7 +443,7 @@ public class TestXPrefs
             pf.Set("empty", "");
 
             var result = pf.Eval("test${Preferences.empty}end");
-            Assert.AreEqual("test${Preferences.empty}(Unknown)end", result);
+            Assert.That(result, Is.EqualTo("test${Preferences.empty}(Unknown)end"), "Should evaluate empty");
         }
         #endregion
     }
@@ -480,16 +480,16 @@ public class TestXPrefs
                 XEnv.ParseArgs(true, "--Preferences@Local=" + customLocalFile);
                 XPrefs.local = null;
                 var local = XPrefs.Local;
-                Assert.AreEqual(customLocalFile, local.File);
-                Assert.AreEqual("customValue", local.GetString("customKey"));
+                Assert.That(local.File, Is.EqualTo(customLocalFile), "Should set local file");
+                Assert.That(local.GetString("customKey"), Is.EqualTo("customValue"), "Should get custom value");
                 #endregion
 
                 #region 3. 测试Local配置文件不存在时的行为
                 XEnv.ParseArgs(true, "--Preferences@Local=nonexistent.json");
                 XPrefs.local = null;
                 local = XPrefs.Local;
-                Assert.AreEqual("nonexistent.json", local.File);
-                Assert.IsFalse(local.Has("key1"), "文件不存在时应该是空配置");
+                Assert.That(local.File, Is.EqualTo("nonexistent.json"), "Should set nonexistent file");
+                Assert.That(local.Has("key1"), Is.False, "文件不存在时应该是空配置");
                 #endregion
 
                 #region 4. 测试Asset配置文件路径覆盖
@@ -498,8 +498,8 @@ public class TestXPrefs
                     XEnv.ParseArgs(true, "--Preferences@Asset=" + customLocalFile);
 
                     XPrefs.asset = null;
-                    Assert.AreEqual(customLocalFile, XPrefs.Asset.File);
-                    Assert.AreEqual("customValue", XPrefs.Asset.GetString("customKey"));
+                    Assert.That(XPrefs.Asset.File, Is.EqualTo(customLocalFile), "Should set custom file");
+                    Assert.That(XPrefs.Asset.GetString("customKey"), Is.EqualTo("customValue"), "Should get custom value");
                 }
                 #endregion
 
@@ -508,8 +508,8 @@ public class TestXPrefs
                 {
                     XEnv.ParseArgs(true, "--Preferences@Asset=nonexistent.json");
                     XPrefs.asset = null;
-                    Assert.AreEqual("nonexistent.json", XPrefs.Asset.File);
-                    Assert.IsFalse(XPrefs.Asset.Has("key1")); // 文件不存在时应该是空配置
+                    Assert.That(XPrefs.Asset.File, Is.EqualTo("nonexistent.json"), "Should set nonexistent file");
+                    Assert.That(XPrefs.Asset.Has("key1"), Is.False, "文件不存在时应该是空配置");
                 }
                 #endregion
 
@@ -524,18 +524,18 @@ public class TestXPrefs
                 XPrefs.local = null;
 
                 var asset = new XPrefs.IAsset();
-                Assert.IsTrue(asset.Read(assetFile));
+                Assert.That(asset.Read(assetFile), Is.True, "Should read asset file successfully");
                 local = XPrefs.Local;
 
                 // 验证Asset结果
-                Assert.AreEqual("value1", asset.GetString("key1"), "原值保持不变");
-                Assert.AreEqual(100, asset.GetInt("key2"), "被Asset命令行参数覆盖");
-                Assert.AreEqual("asset value", asset.GetString("key3"), "Asset新增参数");
+                Assert.That(asset.GetString("key1"), Is.EqualTo("value1"), "原值保持不变");
+                Assert.That(asset.GetInt("key2"), Is.EqualTo(100), "被Asset命令行参数覆盖");
+                Assert.That(asset.GetString("key3"), Is.EqualTo("asset value"), "Asset新增参数");
 
                 // 验证Local结果
-                Assert.AreEqual("value1", local.GetString("key1"), "原值保持不变");
-                Assert.AreEqual(200, local.GetInt("key2"), "被Local命令行参数覆盖");
-                Assert.AreEqual("local value", local.GetString("key3"), "Local新增参数");
+                Assert.That(local.GetString("key1"), Is.EqualTo("value1"), "原值保持不变");
+                Assert.That(local.GetInt("key2"), Is.EqualTo(200), "被Local命令行参数覆盖");
+                Assert.That(local.GetString("key3"), Is.EqualTo("local value"), "Local新增参数");
                 #endregion
 
                 #region 7. 测试多级路径覆盖
@@ -548,25 +548,25 @@ public class TestXPrefs
 
                 XPrefs.local = null;
                 asset = new XPrefs.IAsset();
-                Assert.IsTrue(asset.Read(assetFile));
+                Assert.That(asset.Read(assetFile), Is.True, "Should read asset file successfully");
                 local = XPrefs.Local;
 
                 // 验证Asset多级路径
                 var logConfig = asset.Get<XPrefs.IBase>("Log")
                                     .Get<XPrefs.IBase>("Std")
                                     .Get<XPrefs.IBase>("Config");
-                Assert.AreEqual("Debug", logConfig.GetString("Level"));
+                Assert.That(logConfig.GetString("Level"), Is.EqualTo("Debug"), "Should get debug level");
 
                 var uiConfig = asset.Get<XPrefs.IBase>("UI")
                                    .Get<XPrefs.IBase>("Window")
                                    .Get<XPrefs.IBase>("Style");
-                Assert.AreEqual("Dark", uiConfig.GetString("Theme"));
+                Assert.That(uiConfig.GetString("Theme"), Is.EqualTo("Dark"), "Should get dark theme");
 
                 // 验证Local多级路径
                 var networkConfig = local.Get<XPrefs.IBase>("Network")
                                        .Get<XPrefs.IBase>("Server")
                                        .Get<XPrefs.IBase>("Config");
-                Assert.AreEqual("8080", networkConfig.GetString("Port"));
+                Assert.That(networkConfig.GetString("Port"), Is.EqualTo("8080"), "Should get port");
                 #endregion
 
                 #region 8. 测试多层覆盖优先级
@@ -579,11 +579,11 @@ public class TestXPrefs
 
                 XPrefs.local = null;
                 asset = new XPrefs.IAsset();
-                Assert.IsTrue(asset.Read(assetFile));
+                Assert.That(asset.Read(assetFile), Is.True, "Should read asset file successfully");
                 local = XPrefs.Local;
 
-                Assert.AreEqual("asset value", asset.GetString("sharedKey"), "Asset特定覆盖优先");
-                Assert.AreEqual("local value", local.GetString("sharedKey"), "Local特定覆盖优先");
+                Assert.That(asset.GetString("sharedKey"), Is.EqualTo("asset value"), "Asset特定覆盖优先");
+                Assert.That(local.GetString("sharedKey"), Is.EqualTo("local value"), "Local特定覆盖优先");
                 #endregion
 
                 #region 9. 测试Local配置文件和参数覆盖的顺序
@@ -599,7 +599,7 @@ public class TestXPrefs
 
                 XPrefs.local = null;
                 local = XPrefs.Local;
-                Assert.AreEqual("override value", local.GetString("orderKey"), "命令行参数应该优先于文件内容");
+                Assert.That(local.GetString("orderKey"), Is.EqualTo("override value"), "命令行参数应该优先于文件内容");
                 #endregion
             }
             finally
@@ -671,17 +671,17 @@ public class TestXPrefs
             (XPrefs.Asset as UnityEditor.Build.IPreprocessBuildWithReport).OnPreprocessBuild(null);
 
             // 验证变量求值
-            Assert.IsTrue(MyPreferencesEditor.onSaveCalled, "OnSave 应当被调用。");
-            Assert.IsTrue(MyPreferencesEditor.onApplyCalled, "OnApply 应当被调用。");
-            Assert.IsTrue(MyPreferencesEditor.onBuildCalled, "OnBuild 应当被调用。");
-            Assert.IsTrue(XFile.HasFile(streamingFile), "OnBuild 调用后内置配置文件应当存在。");
+            Assert.That(MyPreferencesEditor.onSaveCalled, Is.True, "OnSave 应当被调用。");
+            Assert.That(MyPreferencesEditor.onApplyCalled, Is.True, "OnApply 应当被调用。");
+            Assert.That(MyPreferencesEditor.onBuildCalled, Is.True, "OnBuild 应当被调用。");
+            Assert.That(XFile.HasFile(streamingFile), Is.True, "OnBuild 调用后内置配置文件应当存在。");
 
             var streamingPreferences = new XPrefs.IBase(encrypt: true);
             streamingPreferences.Read(streamingFile);
-            Assert.AreEqual(XEnv.ProjectPath, streamingPreferences.GetString("environment_key"), "引用环境变量会被求值。");
-            Assert.AreEqual(XEnv.ProjectPath, streamingPreferences.GetString("preferences_key"), "引用配置变量会被求值。");
-            Assert.AreEqual("${Environment.LocalPath}", streamingPreferences.GetString("const_key@Const"), "标记 @Const 的值不会被求值。");
-            Assert.IsFalse(streamingPreferences.Has("editor_key@Editor"), "标记 @Editor 的配置会被移除。");
+            Assert.That(streamingPreferences.GetString("environment_key"), Is.EqualTo(XEnv.ProjectPath), "引用环境变量会被求值。");
+            Assert.That(streamingPreferences.GetString("preferences_key"), Is.EqualTo(XEnv.ProjectPath), "引用配置变量会被求值。");
+            Assert.That(streamingPreferences.GetString("const_key@Const"), Is.EqualTo("${Environment.LocalPath}"), "标记 @Const 的值不会被求值。");
+            Assert.That(streamingPreferences.Has("editor_key@Editor"), Is.False, "标记 @Editor 的配置会被移除。");
         }
         finally
         {

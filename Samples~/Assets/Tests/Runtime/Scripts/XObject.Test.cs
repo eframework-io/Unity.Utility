@@ -33,8 +33,8 @@ public class TestXObject
         var bytes = XObject.ToByte(testObj);
 
         // Assert
-        Assert.IsNotNull(bytes, "结构体序列化后的字节数组不应为空");
-        Assert.AreEqual(Marshal.SizeOf(typeof(TestStruct)), bytes.Length, "序列化后的字节数组长度应与结构体大小相同");
+        Assert.That(bytes, Is.Not.Null, "结构体序列化后的字节数组不应为空");
+        Assert.That(bytes.Length, Is.EqualTo(Marshal.SizeOf(typeof(TestStruct))), "序列化后的字节数组长度应与结构体大小相同");
     }
 
     [Test]
@@ -48,8 +48,8 @@ public class TestXObject
         var deserializedObj = XObject.FromByte<TestStruct>(bytes);
 
         // Assert
-        Assert.AreEqual(testObj.IntTest, deserializedObj.IntTest, "反序列化后的整数字段值应与原始值相同");
-        Assert.AreEqual(testObj.BoolTest, deserializedObj.BoolTest, "反序列化后的布尔字段值应与原始值相同");
+        Assert.That(deserializedObj.IntTest, Is.EqualTo(testObj.IntTest), "反序列化后的整数字段值应与原始值相同");
+        Assert.That(deserializedObj.BoolTest, Is.EqualTo(testObj.BoolTest), "反序列化后的布尔字段值应与原始值相同");
     }
 
     [Test]
@@ -63,13 +63,13 @@ public class TestXObject
         var resultFromNode = XObject.FromJson<TestClass>(JSON.Parse(json));
 
         // Assert
-        Assert.IsNotNull(resultFromString, "从字符串解析的对象不应为空");
-        Assert.AreEqual(1, resultFromString.Id, "从字符串解析的对象 Id 应为 1");
-        Assert.AreEqual("Test", resultFromString.Name, "从字符串解析的对象 Name 应为 'Test'");
+        Assert.That(resultFromString, Is.Not.Null, "从字符串解析的对象不应为空");
+        Assert.That(resultFromString.Id, Is.EqualTo(1), "从字符串解析的对象 Id 应为 1");
+        Assert.That(resultFromString.Name, Is.EqualTo("Test"), "从字符串解析的对象 Name 应为 'Test'");
 
-        Assert.IsNotNull(resultFromNode, "从 JSONNode 解析的对象不应为空");
-        Assert.AreEqual(1, resultFromNode.Id, "从 JSONNode 解析的对象 Id 应为 1");
-        Assert.AreEqual("Test", resultFromNode.Name, "从 JSONNode 解析的对象 Name 应为 'Test'");
+        Assert.That(resultFromNode, Is.Not.Null, "从 JSONNode 解析的对象不应为空");
+        Assert.That(resultFromNode.Id, Is.EqualTo(1), "从 JSONNode 解析的对象 Id 应为 1");
+        Assert.That(resultFromNode.Name, Is.EqualTo("Test"), "从 JSONNode 解析的对象 Name 应为 'Test'");
     }
 
     [Test]
@@ -83,12 +83,12 @@ public class TestXObject
         var jsonCompact = XObject.ToJson(testObj, false);
 
         // Assert
-        Assert.IsNotNull(jsonPretty, "格式化的 JSON 字符串不应为空");
-        Assert.IsTrue(jsonPretty.Contains("\"Id\": 1"), "格式化的 JSON 应包含格式化后的 Id 字段");
-        Assert.IsTrue(jsonPretty.Contains("\"Name\": \"Test\""), "格式化的 JSON 应包含格式化后的 Name 字段");
+        Assert.That(jsonPretty, Is.Not.Null, "格式化的 JSON 字符串不应为空");
+        Assert.That(jsonPretty.Contains("\"Id\": 1"), Is.True, "格式化的 JSON 应包含格式化后的 Id 字段");
+        Assert.That(jsonPretty.Contains("\"Name\": \"Test\""), Is.True, "格式化的 JSON 应包含格式化后的 Name 字段");
 
-        Assert.IsNotNull(jsonCompact, "压缩的 JSON 字符串不应为空");
-        Assert.IsTrue(jsonCompact.Contains("\"Id\":1"), "压缩的 JSON 应包含未格式化的 Id 字段");
-        Assert.IsTrue(jsonCompact.Contains("\"Name\":\"Test\""), "压缩的 JSON 应包含未格式化的 Name 字段");
+        Assert.That(jsonCompact, Is.Not.Null, "压缩的 JSON 字符串不应为空");
+        Assert.That(jsonCompact.Contains("\"Id\":1"), Is.True, "压缩的 JSON 应包含未格式化的 Id 字段");
+        Assert.That(jsonCompact.Contains("\"Name\":\"Test\""), Is.True, "压缩的 JSON 应包含未格式化的 Name 字段");
     }
 }

@@ -33,7 +33,7 @@ public class TestXString
 
         // Assert
         if (expected == "Missing: {1}") LogAssert.Expect(LogType.Exception, new Regex("FormatException"));
-        Assert.AreEqual(expected, result, "字符串格式化结果与预期不符。");
+        Assert.That(result, Is.EqualTo(expected), "字符串格式化结果与预期不符。");
     }
 
     [TestCase(1024, "1 KB", Description = "测试 1KB 转换")]
@@ -47,7 +47,7 @@ public class TestXString
         var result = XString.ToSize(bytes);
 
         // Assert
-        Assert.AreEqual(expected, result, "字节大小转换结果与预期不符。");
+        Assert.That(result, Is.EqualTo(expected), "字节大小转换结果与预期不符。");
     }
 
     [Test]
@@ -65,38 +65,38 @@ public class TestXString
         {
             // 测试 Vector3 -> String
             var stringResult = XString.FromVector3(testCase.Vector);
-            Assert.AreEqual(testCase.String, stringResult, $"{testCase.Description}：向量转字符串结果与预期不符。");
+            Assert.That(stringResult, Is.EqualTo(testCase.String), $"{testCase.Description}：向量转字符串结果与预期不符。");
 
             // 测试 String -> Vector3
             var vectorResult = XString.ToVector3(testCase.String);
-            Assert.AreEqual(testCase.Vector, vectorResult, $"{testCase.Description}：字符串转向量结果与预期不符。");
+            Assert.That(vectorResult, Is.EqualTo(testCase.Vector), $"{testCase.Description}：字符串转向量结果与预期不符。");
 
             // 测试转换的可逆性
             var roundTrip = XString.ToVector3(XString.FromVector3(testCase.Vector));
-            Assert.AreEqual(testCase.Vector, roundTrip, $"{testCase.Description}：向量转换的可逆性验证失败。");
+            Assert.That(roundTrip, Is.EqualTo(testCase.Vector), $"{testCase.Description}：向量转换的可逆性验证失败。");
         }
 
         // 测试无效输入
-        Assert.AreEqual(UnityEngine.Vector3.zero, XString.ToVector3(""), "空字符串应转换为零向量。");
-        Assert.AreEqual(UnityEngine.Vector3.zero, XString.ToVector3("(1,2)"), "参数不足的字符串应转换为零向量。");
+        Assert.That(XString.ToVector3(""), Is.EqualTo(UnityEngine.Vector3.zero), "空字符串应转换为零向量。");
+        Assert.That(XString.ToVector3("(1,2)"), Is.EqualTo(UnityEngine.Vector3.zero), "参数不足的字符串应转换为零向量。");
     }
 
     [Test]
     public void Version()
     {
         // 测试ToVersion方法
-        Assert.AreEqual(-1, XString.ToVersion(""), "空字符串版本号应转换为 -1。");
-        Assert.AreEqual(0, XString.ToVersion("0"), "版本号 0 转换结果错误。");
-        Assert.AreEqual(1, XString.ToVersion("1"), "版本号 1 转换结果错误。");
-        Assert.AreEqual(10001, XString.ToVersion("1.1"), "两段式版本号转换结果错误。");
-        Assert.AreEqual(100010001, XString.ToVersion("1.1.1"), "三段式版本号转换结果错误。");
+        Assert.That(XString.ToVersion(""), Is.EqualTo(-1), "空字符串版本号应转换为 -1。");
+        Assert.That(XString.ToVersion("0"), Is.EqualTo(0), "版本号 0 转换结果错误。");
+        Assert.That(XString.ToVersion("1"), Is.EqualTo(1), "版本号 1 转换结果错误。");
+        Assert.That(XString.ToVersion("1.1"), Is.EqualTo(10001), "两段式版本号转换结果错误。");
+        Assert.That(XString.ToVersion("1.1.1"), Is.EqualTo(100010001), "三段式版本号转换结果错误。");
 
         // 测试FromVersion方法
-        Assert.AreEqual("", XString.FromVersion(-1), "数字 -1 应转换为空版本号。");
-        Assert.AreEqual("0", XString.FromVersion(0), "数字 0 转换为版本号结果错误。");
-        Assert.AreEqual("1", XString.FromVersion(1), "数字 1 转换为版本号结果错误。");
-        Assert.AreEqual("1.1", XString.FromVersion(10001), "数字转两段式版本号结果错误。");
-        Assert.AreEqual("1.1.1", XString.FromVersion(100010001), "数字转三段式版本号结果错误。");
+        Assert.That(XString.FromVersion(-1), Is.EqualTo(""), "数字 -1 应转换为空版本号。");
+        Assert.That(XString.FromVersion(0), Is.EqualTo("0"), "数字 0 转换为版本号结果错误。");
+        Assert.That(XString.FromVersion(1), Is.EqualTo("1"), "数字 1 转换为版本号结果错误。");
+        Assert.That(XString.FromVersion(10001), Is.EqualTo("1.1"), "数字转两段式版本号结果错误。");
+        Assert.That(XString.FromVersion(100010001), Is.EqualTo("1.1.1"), "数字转三段式版本号结果错误。");
     }
 
     [Test]
@@ -114,20 +114,20 @@ public class TestXString
         {
             // 测试 Vector4 -> String
             var stringResult = XString.FromVector4(testCase.Vector);
-            Assert.AreEqual(testCase.String, stringResult, $"{testCase.Description}：向量转字符串结果与预期不符。");
+            Assert.That(stringResult, Is.EqualTo(testCase.String), $"{testCase.Description}：向量转字符串结果与预期不符。");
 
             // 测试 String -> Vector4
             var vectorResult = XString.ToVector4(testCase.String);
-            Assert.AreEqual(testCase.Vector, vectorResult, $"{testCase.Description}：字符串转向量结果与预期不符。");
+            Assert.That(vectorResult, Is.EqualTo(testCase.Vector), $"{testCase.Description}：字符串转向量结果与预期不符。");
 
             // 测试转换的可逆性
             var roundTrip = XString.ToVector4(XString.FromVector4(testCase.Vector));
-            Assert.AreEqual(testCase.Vector, roundTrip, $"{testCase.Description}：向量转换的可逆性验证失败。");
+            Assert.That(roundTrip, Is.EqualTo(testCase.Vector), $"{testCase.Description}：向量转换的可逆性验证失败。");
         }
 
         // 测试无效输入
-        Assert.AreEqual(UnityEngine.Vector4.zero, XString.ToVector4(""), "空字符串应转换为零向量。");
-        Assert.AreEqual(UnityEngine.Vector4.zero, XString.ToVector4("(1,2,3)"), "参数不足的字符串应转换为零向量。");
+        Assert.That(XString.ToVector4(""), Is.EqualTo(UnityEngine.Vector4.zero), "空字符串应转换为零向量。");
+        Assert.That(XString.ToVector4("(1,2,3)"), Is.EqualTo(UnityEngine.Vector4.zero), "参数不足的字符串应转换为零向量。");
     }
 
     [Test]
@@ -147,19 +147,19 @@ public class TestXString
         {
             // 测试 Color -> String
             var stringResult = XString.FromColor(testCase.Color);
-            Assert.AreEqual(testCase.String, stringResult, $"{testCase.Description}：颜色转字符串结果与预期不符。");
+            Assert.That(stringResult, Is.EqualTo(testCase.String), $"{testCase.Description}：颜色转字符串结果与预期不符。");
 
             // 测试 String -> Color
             var colorResult = XString.ToColor(testCase.String);
-            Assert.AreEqual(testCase.Color, colorResult, $"{testCase.Description}：字符串转颜色结果与预期不符。");
+            Assert.That(colorResult, Is.EqualTo(testCase.Color), $"{testCase.Description}：字符串转颜色结果与预期不符。");
 
             // 测试转换的可逆性
             var roundTrip = XString.ToColor(XString.FromColor(testCase.Color));
-            Assert.AreEqual(testCase.Color, roundTrip, $"{testCase.Description}：颜色转换的可逆性验证失败。");
+            Assert.That(roundTrip, Is.EqualTo(testCase.Color), $"{testCase.Description}：颜色转换的可逆性验证失败。");
         }
 
         // 测试无效输入
-        Assert.AreEqual(UnityEngine.Color.black, XString.ToColor(""), "空字符串应转换为黑色。");
+        Assert.That(XString.ToColor(""), Is.EqualTo(UnityEngine.Color.black), "空字符串应转换为黑色。");
     }
 
     [TestCase("This is a long text that needs to be omitted", 10, "This is a ..", Description = "测试长文本缩略")]
@@ -171,7 +171,7 @@ public class TestXString
         var result = input.Omit(length);
 
         // Assert
-        Assert.AreEqual(expected, result, "文本缩略结果与预期不符。");
+        Assert.That(result, Is.EqualTo(expected), "文本缩略结果与预期不符。");
     }
 
     [TestCase("This is a long text that needs simplification", 20, "This is a...fication", Description = "测试长文本简化")]
@@ -187,7 +187,7 @@ public class TestXString
         var result = input.Simplify(length);
 
         // Assert
-        Assert.AreEqual(expected, result, "文本简化结果与预期不符。");
+        Assert.That(result, Is.EqualTo(expected), "文本简化结果与预期不符。");
     }
 
     [Test]
@@ -206,18 +206,18 @@ public class TestXString
         {
             // 测试默认加密/解密
             var encrypted = testCase.Encrypt();
-            Assert.AreNotEqual(testCase, encrypted, "加密后的文本不应与原文相同。");
+            Assert.That(encrypted, Is.Not.EqualTo(testCase), "加密后的文本不应与原文相同。");
 
             var decrypted = encrypted.Decrypt();
-            Assert.AreEqual(testCase, decrypted, "解密后的文本应与原文相同。");
+            Assert.That(decrypted, Is.EqualTo(testCase), "解密后的文本应与原文相同。");
 
             // 测试带密钥的加密/解密
             var key1 = "abcdefgh"; // 确保8字节长度
             var encryptedWithKey1 = testCase.Encrypt(key1);
-            Assert.AreNotEqual(testCase, encryptedWithKey1, "使用密钥加密后的文本不应与原文相同。");
+            Assert.That(encryptedWithKey1, Is.Not.EqualTo(testCase), "使用密钥加密后的文本不应与原文相同。");
 
             var decryptedWithKey1 = encryptedWithKey1.Decrypt(key1);
-            Assert.AreEqual(testCase, decryptedWithKey1, "使用密钥解密后的文本应与原文相同。");
+            Assert.That(decryptedWithKey1, Is.EqualTo(testCase), "使用密钥解密后的文本应与原文相同。");
 
             // 测试不同密钥的加密结果不同
             var key2 = "12345678"; // 确保8字节长度且与key1完全不同
@@ -226,7 +226,7 @@ public class TestXString
             // 只有在testCase不为空时才比较加密结果
             if (!string.IsNullOrEmpty(testCase))
             {
-                Assert.AreNotEqual(encryptedWithKey1, encryptedWithKey2, "不同密钥加密的结果应该不同。");
+                Assert.That(encryptedWithKey2, Is.Not.EqualTo(encryptedWithKey1), "不同密钥加密的结果应该不同。");
             }
         }
 
@@ -241,28 +241,28 @@ public class TestXString
     {
         // 测试默认参数（format="N", length=32）
         var defaultResult = XString.Random();
-        Assert.AreEqual(32, defaultResult.Length, "默认格式应生成32位字符串。");
-        Assert.IsTrue(Regex.IsMatch(defaultResult, "^[0-9a-f]{32}$"), "默认格式应生成32位十六进制字符串。");
+        Assert.That(defaultResult.Length, Is.EqualTo(32), "默认格式应生成32位字符串。");
+        Assert.That(Regex.IsMatch(defaultResult, "^[0-9a-f]{32}$"), Is.True, "默认格式应生成32位十六进制字符串。");
 
         // 测试不同的GUID格式
         // "D"格式：含连字符的32位数字
         var resultD = XString.Random("D");
-        Assert.AreEqual(36, resultD.Length, "D格式应生成36位字符串。");
-        Assert.IsTrue(Regex.IsMatch(resultD, "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"), "D格式应生成带连字符的GUID字符串。");
+        Assert.That(resultD.Length, Is.EqualTo(36), "D格式应生成36位字符串。");
+        Assert.That(Regex.IsMatch(resultD, "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"), Is.True, "D格式应生成带连字符的GUID字符串。");
 
         // "B"格式：带括号、连字符的32位数字
         var resultB = XString.Random("B");
-        Assert.AreEqual(38, resultB.Length, "B格式应生成38位字符串。");
-        Assert.IsTrue(Regex.IsMatch(resultB, @"^\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\}$"), "B格式应生成带括号和连字符的GUID字符串。");
+        Assert.That(resultB.Length, Is.EqualTo(38), "B格式应生成38位字符串。");
+        Assert.That(Regex.IsMatch(resultB, @"^\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\}$"), Is.True, "B格式应生成带括号和连字符的GUID字符串。");
 
         // "P"格式：带括号的32位数字
         var resultP = XString.Random("P");
-        Assert.AreEqual(38, resultP.Length, "P格式应生成38位字符串。");
-        Assert.IsTrue(Regex.IsMatch(resultP, @"^\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)$"), "P格式应生成带括号和连字符的GUID字符串。");
+        Assert.That(resultP.Length, Is.EqualTo(38), "P格式应生成38位字符串。");
+        Assert.That(Regex.IsMatch(resultP, @"^\([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\)$"), Is.True, "P格式应生成带括号和连字符的GUID字符串。");
 
         // 测试两次生成的随机字符串不相同
         var result1 = XString.Random();
         var result2 = XString.Random();
-        Assert.AreNotEqual(result1, result2, "连续生成的随机字符串应该不同。");
+        Assert.That(result2, Is.Not.EqualTo(result1), "连续生成的随机字符串应该不同。");
     }
 }

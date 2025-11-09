@@ -21,7 +21,7 @@ public class TestXPool
     {
         // 测试基本的Get/Put功能
         var obj1 = XPool.Object<List<int>>.Get();
-        Assert.IsNotNull(obj1, "从对象池获取的实例不应为空");
+        Assert.That(obj1, Is.Not.Null, "从对象池获取的实例不应为空");
         obj1.Add(1);
         XPool.Object<List<int>>.Put(obj1);
 
@@ -50,7 +50,7 @@ public class TestXPool
                 for (int j = 0; j < operationsPerThread; j++)
                 {
                     var obj = XPool.Object<List<int>>.Get();
-                    Assert.IsNotNull(obj, "多线程环境下从对象池获取的实例不应为空");
+                    Assert.That(obj, Is.Not.Null, "多线程环境下从对象池获取的实例不应为空");
                     XPool.Object<List<int>>.Put(obj);
                 }
             }));
@@ -77,24 +77,24 @@ public class TestXPool
             onSetCache = cache;
             return origin;
         });
-        Assert.IsTrue(XPool.GameObject.Set(key, obj, XPool.GameObject.CacheType.Global), "设置预制体到全局对象池应成功");
-        Assert.IsTrue(XPool.GameObject.Has(key), "对象池中应能找到已设置的预制体");
-        Assert.AreEqual(onSetKey, key, "设置预制体的钩子函数 key 参数应当和传入的相等");
-        Assert.AreEqual(onSetOrigin, obj, "设置预制体的钩子函数 origin 参数应当和传入的相等");
-        Assert.AreEqual(onSetCache, XPool.GameObject.CacheType.Global, "设置预制体的钩子函数 cache 参数应当和传入的相等");
+        Assert.That(XPool.GameObject.Set(key, obj, XPool.GameObject.CacheType.Global), Is.True, "设置预制体到全局对象池应成功");
+        Assert.That(XPool.GameObject.Has(key), Is.True, "对象池中应能找到已设置的预制体");
+        Assert.That(onSetKey, Is.EqualTo(key), "设置预制体的钩子函数 key 参数应当和传入的相等");
+        Assert.That(onSetOrigin, Is.SameAs(obj), "设置预制体的钩子函数 origin 参数应当和传入的相等");
+        Assert.That(onSetCache, Is.EqualTo(XPool.GameObject.CacheType.Global), "设置预制体的钩子函数 cache 参数应当和传入的相等");
         XPool.GameObject.OnSet = onSet;
 
         LogAssert.Expect(LogType.Error, new Regex(Regex.Escape("XPool.GameObject.Set: key is null.")));
-        Assert.IsFalse(XPool.GameObject.Set(null), "设置空键的对象池应当不成功");
+        Assert.That(XPool.GameObject.Set(null), Is.False, "设置空键的对象池应当不成功");
         LogAssert.Expect(LogType.Error, new Regex(Regex.Escape("XPool.GameObject.Set: key is null.")));
-        Assert.IsFalse(XPool.GameObject.Set(""), "设置空键的对象池应当不成功");
-        Assert.IsFalse(XPool.GameObject.Set(key), "重复设置相同键的对象池应当不成功");
-        Assert.IsFalse(XPool.GameObject.Set(key + "2", null), "设置空对象的对象池应当不成功");
+        Assert.That(XPool.GameObject.Set(""), Is.False, "设置空键的对象池应当不成功");
+        Assert.That(XPool.GameObject.Set(key), Is.False, "重复设置相同键的对象池应当不成功");
+        Assert.That(XPool.GameObject.Set(key + "2", null), Is.False, "设置空对象的对象池应当不成功");
 
         // 测试Get功能
         var obj1 = XPool.GameObject.Get(key);
-        Assert.IsNotNull(obj1, "从对象池实例化的游戏对象不应为空");
-        Assert.AreEqual(obj.name, obj1.name, "实例化的对象名称应与预制体一致");
+        Assert.That(obj1, Is.Not.Null, "从对象池实例化的游戏对象不应为空");
+        Assert.That(obj1.name, Is.EqualTo(obj.name), "实例化的对象名称应与预制体一致");
 
         // 测试Put功能
         XPool.GameObject.Put(obj1);
@@ -107,17 +107,17 @@ public class TestXPool
         // 测试自动回收
         var obj3 = XPool.GameObject.Get(key, life: 500);
         yield return new WaitForSeconds(1);
-        Assert.IsFalse(obj3.activeSelf, "对象池应自动回收游戏对象实例");
+        Assert.That(obj3.activeSelf, Is.False, "对象池应自动回收游戏对象实例");
 
         // 测试延迟回收
         var obj4 = XPool.GameObject.Get(key);
         XPool.GameObject.Put(obj4, delay: 500);
         yield return new WaitForSeconds(1);
-        Assert.IsFalse(obj4.activeSelf, "对象池应延迟回收游戏对象实例");
+        Assert.That(obj4.activeSelf, Is.False, "对象池应延迟回收游戏对象实例");
 
         // 测试Del功能
-        Assert.IsTrue(XPool.GameObject.Unset(key), "从对象池中删除预制体应成功");
-        Assert.IsFalse(XPool.GameObject.Has(key), "删除后对象池中不应再存在该预制体");
+        Assert.That(XPool.GameObject.Unset(key), Is.True, "从对象池中删除预制体应成功");
+        Assert.That(XPool.GameObject.Has(key), Is.False, "删除后对象池中不应再存在该预制体");
 
         // 清理
         UnityEngine.Object.Destroy(obj);
@@ -129,31 +129,31 @@ public class TestXPool
     {
         // 测试Get创建新对象
         var buffer1 = XPool.StreamBuffer.Get(1024);
-        Assert.IsNotNull(buffer1, "从缓冲池获取的字节流不应为空");
-        Assert.AreEqual(1024, buffer1.Capacity, "字节流容量应与请求的大小一致");
-        Assert.AreEqual(0, buffer1.Length, "新创建的字节流长度应为0");
-        Assert.AreEqual(0, buffer1.Position, "新创建的字节流位置应为0");
+        Assert.That(buffer1, Is.Not.Null, "从缓冲池获取的字节流不应为空");
+        Assert.That(buffer1.Capacity, Is.EqualTo(1024), "字节流容量应与请求的大小一致");
+        Assert.That(buffer1.Length, Is.EqualTo(0), "新创建的字节流长度应为0");
+        Assert.That(buffer1.Position, Is.EqualTo(0), "新创建的字节流位置应为0");
 
         // 测试写入和Flush
         var testData = new byte[] { 1, 2, 3, 4 };
         buffer1.Writer.Write(testData);
-        Assert.AreEqual(4, buffer1.Position, "写入数据后流位置应等于写入的数据长度");
+        Assert.That(buffer1.Position, Is.EqualTo(4), "写入数据后流位置应等于写入的数据长度");
         buffer1.Flush();
-        Assert.AreEqual(4, buffer1.Length, "Flush后流长度应等于最后写入位置");
-        Assert.AreEqual(0, buffer1.Position, "Flush后流位置应重置为0");
+        Assert.That(buffer1.Length, Is.EqualTo(4), "Flush后流长度应等于最后写入位置");
+        Assert.That(buffer1.Position, Is.EqualTo(0), "Flush后流位置应重置为0");
 
         // 测试Put和对象池
         var originalBuffer = buffer1.Buffer;
         XPool.StreamBuffer.Put(buffer1);
         var buffer2 = XPool.StreamBuffer.Get(1024);
         Assert.That(buffer2, Is.SameAs(buffer1), "缓冲池应返回之前缓存的同一个字节流实例");
-        Assert.AreEqual(-1, buffer2.Length, "复用的字节流长度应被重置为-1");
-        Assert.AreEqual(0, buffer2.Position, "复用的字节流位置应被重置为0");
+        Assert.That(buffer2.Length, Is.EqualTo(-1), "复用的字节流长度应被重置为-1");
+        Assert.That(buffer2.Position, Is.EqualTo(0), "复用的字节流位置应被重置为0");
 
         // 测试获取更大容量的buffer
         var buffer3 = XPool.StreamBuffer.Get(2048);
         Assert.That(buffer3, Is.Not.SameAs(buffer1), "请求更大容量时应创建新的字节流实例");
-        Assert.AreEqual(2048, buffer3.Capacity, "新字节流容量应与请求的大小一致");
+        Assert.That(buffer3.Capacity, Is.EqualTo(2048), "新字节流容量应与请求的大小一致");
 
         // 测试ByteMax限制
         var largeBuffer = XPool.StreamBuffer.Get(XPool.StreamBuffer.ByteMax + 1);

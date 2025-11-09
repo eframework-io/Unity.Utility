@@ -53,7 +53,7 @@ public class TestXComp
         var result = target.GetTransform();
 
         // Assert - 验证获取的 Transform 与目标对象的 Transform 完全一致
-        Assert.AreEqual(target, result, "获取的 Transform 应与目标对象的 Transform 相同");
+        Assert.That(target, Is.EqualTo(result), "获取的 Transform 应与目标对象的 Transform 相同");
     }
 
     [TestCase(true)]
@@ -68,9 +68,8 @@ public class TestXComp
         var children = rootObject.GetChildren(includeInactive);
 
         // Assert - 验证子对象数量和引用正确性
-        Assert.AreEqual(expectedCount, children.Length, $"子对象数量应为 {expectedCount}");
-        if (expectedCount > 0)
-            Assert.AreEqual(childObject.transform, children[0], "第一个子对象应为 Child");
+        Assert.That(children.Length, Is.EqualTo(expectedCount), $"子对象数量应为 {expectedCount}");
+        if (expectedCount > 0) Assert.That(children[0], Is.EqualTo(childObject.transform), "第一个子对象应为 Child");
     }
 
     [TestCase(null, 1, 1, 1)]
@@ -90,7 +89,7 @@ public class TestXComp
             target.SetLocalScale(expectedScale);
 
         // Assert - 验证对象的局部缩放值是否正确设置
-        Assert.AreEqual(expectedScale, target.transform.localScale, $"对象的局部缩放应为 ({x}, {y}, {z})");
+        Assert.That(target.transform.localScale, Is.EqualTo(expectedScale), $"对象的局部缩放应为 ({x}, {y}, {z})");
     }
 
     [TestCase(null, 1, 2, 3)]
@@ -110,7 +109,7 @@ public class TestXComp
             target.SetPosition(expectedPosition);
 
         // Assert - 验证对象的世界坐标位置是否正确设置
-        Assert.AreEqual(expectedPosition, target.transform.position, $"对象的世界坐标位置应为 ({x}, {y}, {z})");
+        Assert.That(target.transform.position, Is.EqualTo(expectedPosition), $"对象的世界坐标位置应为 ({x}, {y}, {z})");
     }
 
     [TestCase(null, 1, 2, 3)]
@@ -130,7 +129,7 @@ public class TestXComp
             target.SetLocalPosition(expectedPosition);
 
         // Assert - 验证对象的局部坐标位置是否正确设置
-        Assert.AreEqual(expectedPosition, target.transform.localPosition, $"对象的局部坐标位置应为 ({x}, {y}, {z})");
+        Assert.That(target.transform.localPosition, Is.EqualTo(expectedPosition), $"对象的局部坐标位置应为 ({x}, {y}, {z})");
     }
 
     [TestCase(null, 0, 0, 0)]
@@ -193,13 +192,10 @@ public class TestXComp
             target.SetParent(newParent, worldPositionStays);
 
             // Assert - 验证父子关系和位置保持
-            Assert.AreEqual(newParent.transform, target.transform.parent, "目标对象的父对象应为新创建的父对象");
+            Assert.That(target.transform.parent, Is.EqualTo(newParent.transform), "目标对象的父对象应为新创建的父对象");
             if (worldPositionStays) Assert.That(Vector3.Distance(target.transform.position, originalPosition), Is.LessThan(0.001f), "当worldPositionStays为true时，对象的世界坐标位置应保持不变");
         }
-        finally
-        {
-            Object.DestroyImmediate(newParent);
-        }
+        finally { Object.DestroyImmediate(newParent); }
     }
 
     [TestCase(null, true)]
@@ -210,14 +206,11 @@ public class TestXComp
         var target = path != null ? rootObject.GetTransform(path).gameObject : rootObject;
 
         // Act
-        if (path != null)
-            rootObject.DestroyGameObject(path, immediate);
-        else
-            target.DestroyGameObject(immediate);
+        if (path != null) rootObject.DestroyGameObject(path, immediate);
+        else target.DestroyGameObject(immediate);
 
         // Assert - 验证对象是否被正确销毁
-        if (immediate)
-            Assert.IsTrue(target == null, "当immediate为true时，对象应被立即销毁");
+        if (immediate) Assert.That(target == null, "当immediate为true时，对象应被立即销毁");
     }
 
     [Test]
@@ -232,9 +225,9 @@ public class TestXComp
         try
         {
             // Assert - 验证克隆对象的属性
-            Assert.IsNotNull(clone, "克隆对象不应为空");
-            Assert.AreEqual(originalName, clone.name, "克隆对象应保持原对象的名称");
-            Assert.AreNotEqual(rootObject, clone, "克隆对象应是一个新的实例");
+            Assert.That(clone, Is.Not.Null, "克隆对象不应为空");
+            Assert.That(clone.name, Is.EqualTo(originalName), "克隆对象应保持原对象的名称");
+            Assert.That(clone, Is.Not.EqualTo(rootObject), "克隆对象应是一个新的实例");
         }
         finally
         {
@@ -257,7 +250,7 @@ public class TestXComp
             target.SetLayer(layerName);
 
         // Assert - 验证对象的层级是否正确设置
-        Assert.AreEqual(expectedLayer, target.layer, $"对象的层级应设置为 {layerName}");
+        Assert.That(target.layer, Is.EqualTo(expectedLayer), $"对象的层级应设置为 {layerName}");
     }
 
     [TestCase(null, true)]
@@ -272,7 +265,7 @@ public class TestXComp
         else target.SetGameObjectActive(active);
 
         // Assert - 验证对象的激活状态是否正确设置
-        Assert.AreEqual(active, target.activeSelf, $"对象的激活状态应为 {active}");
+        Assert.That(target.activeSelf, Is.EqualTo(active), $"对象的激活状态应为 {active}");
     }
 
     [TestCase(5, true)]
@@ -290,10 +283,10 @@ public class TestXComp
             rootObject.transform.EnsureChild(count, active);
 
             // Assert - 验证子对象数量和激活状态
-            Assert.AreEqual(count, rootObject.transform.childCount, $"子对象数量应为 {count}");
+            Assert.That(rootObject.transform.childCount, Is.EqualTo(count), $"子对象数量应为 {count}");
             for (int i = 0; i < count; i++)
             {
-                Assert.AreEqual(active, rootObject.transform.GetChild(i).gameObject.activeSelf, $"第 {i} 个子对象的激活状态应为 {active}");
+                Assert.That(rootObject.transform.GetChild(i).gameObject.activeSelf, Is.EqualTo(active), $"第 {i} 个子对象的激活状态应为 {active}");
             }
         }
         finally
@@ -313,7 +306,7 @@ public class TestXComp
         rootObject.transform.EachChild(CountChildren);
 
         // Assert - 验证是否遍历了所有子对象
-        Assert.AreEqual(rootObject.transform.childCount, processedCount, "处理的子对象数量应等于实际子对象数量");
+        Assert.That(rootObject.transform.childCount, Is.EqualTo(processedCount), "处理的子对象数量应等于实际子对象数量");
     }
 
     [Test]
@@ -326,7 +319,7 @@ public class TestXComp
         rootObject.transform.ShowChild();
 
         // Assert - 验证子对象是否被正确显示
-        Assert.IsTrue(childObject.activeSelf, "子对象应被设置为显示状态");
+        Assert.That(childObject.activeSelf, Is.True, "子对象应被设置为显示状态");
     }
 
     [Test]
@@ -336,7 +329,7 @@ public class TestXComp
         rootObject.transform.HideChild();
 
         // Assert - 验证子对象是否被正确隐藏
-        Assert.IsFalse(childObject.activeSelf, "子对象应被设置为隐藏状态");
+        Assert.That(childObject.activeSelf, Is.False, "子对象应被设置为隐藏状态");
     }
     #endregion
 
@@ -353,7 +346,7 @@ public class TestXComp
         var result = target.GetComponentInParent(typeof(BoxCollider), includeInactive);
 
         // Assert - 验证获取的父级组件是否正确
-        Assert.AreEqual(collider, result, "获取的父级组件应与根对象上添加的组件相同");
+        Assert.That(result, Is.EqualTo(collider), "获取的父级组件应与根对象上添加的组件相同");
     }
 
     [TestCase(null, true)]
@@ -367,10 +360,8 @@ public class TestXComp
         var result = target.GetComponent(typeof(BoxCollider), attachIfMissing);
 
         // Assert - 验证组件获取或添加结果
-        if (attachIfMissing)
-            Assert.IsNotNull(result, "当attachIfMissing为true时，应返回一个有效的组件");
-        else
-            Assert.IsNull(result, "当attachIfMissing为false时，应返回null");
+        if (attachIfMissing) Assert.That(result, Is.Not.Null, "当attachIfMissing为true时，应返回一个有效的组件");
+        else Assert.That(result, Is.Null, "当attachIfMissing为false时，应返回null");
     }
 
     [TestCase(null, true)]
@@ -386,10 +377,8 @@ public class TestXComp
         var result = target.GetComponentInChildren(typeof(BoxCollider), includeInactive);
 
         // Assert - 验证获取的子对象组件是否正确
-        if (includeInactive || childObject.activeSelf)
-            Assert.AreEqual(collider, result, "获取的子对象组件应与Child对象上添加的组件相同");
-        else
-            Assert.IsNull(result, "当子对象未激活且不包含未激活对象时，应返回null");
+        if (includeInactive || childObject.activeSelf) Assert.That(result, Is.EqualTo(collider), "获取的子对象组件应与Child对象上添加的组件相同");
+        else Assert.That(result, Is.Null, "当子对象未激活且不包含未激活对象时，应返回null");
     }
 
     [TestCase(null, true)]
@@ -405,9 +394,9 @@ public class TestXComp
         var components = target.GetComponentsInParent(typeof(BoxCollider), includeInactive);
 
         // Assert - 验证获取的父级组件数组
-        Assert.AreEqual(2, components.Length, "应获取到两个BoxCollider组件");
-        Assert.Contains(collider1, components, "组件数组中应包含第一个BoxCollider");
-        Assert.Contains(collider2, components, "组件数组中应包含第二个BoxCollider");
+        Assert.That(components.Length, Is.EqualTo(2), "应获取到两个BoxCollider组件");
+        Assert.That(components.Contains(collider1), "组件数组中应包含第一个BoxCollider");
+        Assert.That(components.Contains(collider2), "组件数组中应包含第二个BoxCollider");
     }
 
     [TestCase(null)]
@@ -423,9 +412,9 @@ public class TestXComp
         var components = target.GetComponents(typeof(BoxCollider));
 
         // Assert - 验证获取的组件数组
-        Assert.AreEqual(2, components.Length, "应获取到两个BoxCollider组件");
-        Assert.Contains(collider1, components, "组件数组中应包含第一个BoxCollider");
-        Assert.Contains(collider2, components, "组件数组中应包含第二个BoxCollider");
+        Assert.That(components.Length, Is.EqualTo(2), "应获取到两个BoxCollider组件");
+        Assert.That(components.Contains(collider1), "组件数组中应包含第一个BoxCollider");
+        Assert.That(components.Contains(collider2), "组件数组中应包含第二个BoxCollider");
     }
 
     [TestCase(null, true)]
@@ -451,14 +440,14 @@ public class TestXComp
         if (includeInactive)
         {
             // 包含非激活对象时，应该找到所有组件
-            Assert.AreEqual(2, components.Length, "应获取到所有子对象的BoxCollider组件");
+            Assert.That(components.Length, Is.EqualTo(2), "应获取到所有子对象的BoxCollider组件");
             Assert.That(components.Contains(collider1), "组件数组中应包含Child对象的BoxCollider");
             Assert.That(components.Contains(collider2), "组件数组中应包含GrandChild对象的BoxCollider");
         }
         else
         {
             // 不包含非激活对象时，只能找到激活对象上的组件
-            Assert.AreEqual(1, components.Length, "应只获取到激活子对象的BoxCollider组件");
+            Assert.That(components.Length, Is.EqualTo(1), "应只获取到激活子对象的BoxCollider组件");
             Assert.That(components.Contains(collider1), "组件数组中应包含Child对象的BoxCollider");
             Assert.That(!components.Contains(collider2), "组件数组中不应包含非激活的GrandChild对象的BoxCollider");
         }
@@ -475,9 +464,9 @@ public class TestXComp
         var result = target.AddComponent(typeof(BoxCollider));
 
         // Assert - 验证组件添加结果
-        Assert.IsNotNull(result, "添加的组件不应为空");
-        Assert.IsTrue(result is BoxCollider, "添加的组件类型应为BoxCollider");
-        Assert.AreEqual(target.GetComponent<BoxCollider>(), result, "添加的组件应能通过GetComponent获取");
+        Assert.That(result, Is.Not.Null, "添加的组件不应为空");
+        Assert.That(result, Is.TypeOf<BoxCollider>(), "添加的组件类型应为BoxCollider");
+        Assert.That(target.GetComponent<BoxCollider>(), Is.EqualTo(result), "添加的组件应能通过GetComponent获取");
     }
 
     [TestCase(null, true)]
@@ -492,8 +481,7 @@ public class TestXComp
         target.RemoveComponent(typeof(BoxCollider), immediate);
 
         // Assert - 验证组件移除结果
-        if (immediate)
-            Assert.IsNull(target.GetComponent<BoxCollider>(), "当immediate为true时，组件应被立即移除");
+        if (immediate) Assert.That(target.GetComponent<BoxCollider>(), Is.Null, "当immediate为true时，组件应被立即移除");
     }
 
     [TestCase(null, true)]
@@ -508,7 +496,7 @@ public class TestXComp
         target.SetComponentEnabled(typeof(AudioListener), enabled);
 
         // Assert - 验证组件启用状态
-        Assert.AreEqual(enabled, behaviour.enabled, $"组件的启用状态应为 {enabled}");
+        Assert.That(behaviour.enabled, Is.EqualTo(enabled), $"组件的启用状态应为 {enabled}");
     }
     #endregion
 
@@ -550,11 +538,9 @@ public class TestXComp
             var result = rootObject.Index(name, type);
 
             // Assert - 验证索引结果
-            Assert.IsNotNull(result, "索引结果不应为空");
-            if (type != null)
-                Assert.AreEqual(expectedComponent, result, "当指定类型时，应返回对应的组件");
-            else
-                Assert.AreEqual(customChild.transform, result, "当未指定类型时，应返回Transform组件");
+            Assert.That(result, Is.Not.Null, "索引结果不应为空");
+            if (type != null) Assert.That(result, Is.EqualTo(expectedComponent), "当指定类型时，应返回对应的组件");
+            else Assert.That(result, Is.EqualTo(customChild.transform), "当未指定类型时，应返回Transform组件");
         }
         finally
         {

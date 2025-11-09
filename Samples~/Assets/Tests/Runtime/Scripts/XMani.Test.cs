@@ -21,13 +21,13 @@ public class TestXMani
         var result = manifest.Parse(data, out string error);
 
         // Assert
-        Assert.IsTrue(result, "清单解析应该成功完成");
-        Assert.IsEmpty(error, "解析过程不应产生错误信息");
-        Assert.AreEqual(2, manifest.Files.Count, "清单应包含两个文件记录");
-        Assert.AreEqual("file1.txt", manifest.Files[0].Name, "第一个文件名称应正确解析");
-        Assert.AreEqual(0, manifest.Files[0].Size, "第一个文件大小应为 0");
-        Assert.AreEqual("file2.txt", manifest.Files[1].Name, "第二个文件名称应正确解析");
-        Assert.AreEqual(123, manifest.Files[1].Size, "第二个文件大小应为 123");
+        Assert.That(result, Is.True, "清单解析应该成功完成");
+        Assert.That(error, Is.Empty, "解析过程不应产生错误信息");
+        Assert.That(manifest.Files.Count, Is.EqualTo(2), "清单应包含两个文件记录");
+        Assert.That(manifest.Files[0].Name, Is.EqualTo("file1.txt"), "第一个文件名称应正确解析");
+        Assert.That(manifest.Files[0].Size, Is.EqualTo(0), "第一个文件大小应为 0");
+        Assert.That(manifest.Files[1].Name, Is.EqualTo("file2.txt"), "第二个文件名称应正确解析");
+        Assert.That(manifest.Files[1].Size, Is.EqualTo(123), "第二个文件大小应为 123");
     }
 
     [Test]
@@ -54,13 +54,13 @@ public class TestXMani
         while (!handler.Invoke()) { }
 
         // Assert
-        Assert.IsTrue(string.IsNullOrEmpty(manifest.Error), "读取清单文件不应产生错误");
-        Assert.IsNotEmpty(manifest.Files, "清单文件应包含文件记录");
+        Assert.That(string.IsNullOrEmpty(manifest.Error), Is.True, "读取清单文件不应产生错误");
+        Assert.That(manifest.Files, Is.Not.Empty, "清单文件应包含文件记录");
 
         var fileInfo = manifest.Files.Find(ele => ele.Name == "file1.txt");
-        Assert.IsNotNull(fileInfo, "清单文件应包含 file1.txt 的文件记录");
-        Assert.AreEqual(fileInfo.MD5, "d41d8cd98f00b204e9800998ecf8427e", "清单文件解析的 file1.txt 文件哈希值应当和保存的一致");
-        Assert.AreEqual(fileInfo.Size, 100, "清单文件解析的 file1.txt 文件大小应当和保存的一致");
+        Assert.That(fileInfo, Is.Not.Null, "清单文件应包含 file1.txt 的文件记录");
+        Assert.That(fileInfo.MD5, Is.EqualTo("d41d8cd98f00b204e9800998ecf8427e"), "清单文件解析的 file1.txt 文件哈希值应当和保存的一致");
+        Assert.That(fileInfo.Size, Is.EqualTo(100), "清单文件解析的 file1.txt 文件大小应当和保存的一致");
 
         XFile.DeleteDirectory(tempDir);
     }
@@ -81,9 +81,9 @@ public class TestXMani
         var diff = manifest1.Compare(manifest2);
 
         // Assert
-        Assert.AreEqual(1, diff.Deleted.Count, "应检测到一个被删除的文件（file2.txt）");
-        Assert.AreEqual(1, diff.Added.Count, "应检测到一个新增的文件（file3.txt）");
-        Assert.AreEqual(0, diff.Modified.Count, "不应有被修改的文件");
+        Assert.That(diff.Deleted.Count, Is.EqualTo(1), "应检测到一个被删除的文件（file2.txt）");
+        Assert.That(diff.Added.Count, Is.EqualTo(1), "应检测到一个新增的文件（file3.txt）");
+        Assert.That(diff.Modified.Count, Is.EqualTo(0), "不应有被修改的文件");
     }
 
     [Test]
@@ -98,7 +98,7 @@ public class TestXMani
         var result = manifest.ToString();
 
         // Assert
-        Assert.IsTrue(result.Contains("file1.txt|md5_1|100"), "清单文本应包含第一个文件的完整信息");
-        Assert.IsTrue(result.Contains("file2.txt|md5_2|200"), "清单文本应包含第二个文件的完整信息");
+        Assert.That(result.Contains("file1.txt|md5_1|100"), Is.True, "清单文本应包含第一个文件的完整信息");
+        Assert.That(result.Contains("file2.txt|md5_2|200"), Is.True, "清单文本应包含第二个文件的完整信息");
     }
 }

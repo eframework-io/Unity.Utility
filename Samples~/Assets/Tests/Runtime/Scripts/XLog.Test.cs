@@ -47,7 +47,7 @@ public class TestXLog
         fileConf.Set(XLog.FileAdapter.Preferences.Path, logPath);
         fileConf.Set(XLog.FileAdapter.Preferences.Level, XLog.LevelType.Debug.ToString());
         fileConf.Set(XLog.FileAdapter.Preferences.Rotate, false); // 禁用日志轮转，便于测试
-        preferences.Set("Log/File", fileConf);
+        preferences.Set("XLog/File", fileConf);
 
         // 初始化日志系统
         XLog.Initialize(preferences);
@@ -89,7 +89,7 @@ public class TestXLog
         var fileConf = new XPrefs.IBase();
         fileConf.Set(XLog.FileAdapter.Preferences.Level, XLog.LevelType.Debug.ToString());
         fileConf.Set(XLog.FileAdapter.Preferences.Path, XFile.PathJoin(tempLogPath, "TestLevels.log"));
-        preferences.Set("Log/File", fileConf);
+        preferences.Set("XLog/File", fileConf);
 
         XLog.Initialize(preferences);
 
@@ -113,7 +113,7 @@ public class TestXLog
         fileConf.Set(XLog.FileAdapter.Preferences.Path, logPath);
         fileConf.Set(XLog.FileAdapter.Preferences.Level, XLog.LevelType.Debug.ToString());
         fileConf.Set(XLog.FileAdapter.Preferences.Rotate, false);
-        preferences.Set("Log/File", fileConf);
+        preferences.Set("XLog/File", fileConf);
 
         XLog.Initialize(preferences);
 
@@ -167,7 +167,7 @@ public class TestXLog
         fileConf.Set(XLog.FileAdapter.Preferences.Path, logPath);
         fileConf.Set(XLog.FileAdapter.Preferences.Level, XLog.LevelType.Debug.ToString());
         fileConf.Set(XLog.FileAdapter.Preferences.Rotate, false);
-        preferences.Set("Log/File", fileConf);
+        preferences.Set("XLog/File", fileConf);
 
         XLog.Initialize(preferences);
 
@@ -253,7 +253,7 @@ public class TestXLog
         fileConf.Set(XLog.FileAdapter.Preferences.Path, logPath);
         fileConf.Set(XLog.FileAdapter.Preferences.Level, XLog.LevelType.Debug.ToString());
         fileConf.Set(XLog.FileAdapter.Preferences.Rotate, false); // 禁用日志轮转，便于测试
-        preferences.Set("Log/File", fileConf);
+        preferences.Set("XLog/File", fileConf);
 
         // 初始化日志系统
         XLog.Initialize(preferences);

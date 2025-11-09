@@ -25,9 +25,9 @@ public class TestXEvent
         // Act & Assert
         if (!multiple) LogAssert.Expect(LogType.Error, new Regex("doesn't support multiple registrations"));
         // 验证首次注册回调应该成功
-        Assert.IsTrue(manager.Register(1, callback1), "首次注册回调应该成功");
+        Assert.That(manager.Register(1, callback1), Is.True, "首次注册回调应该成功");
         // 验证多重监听设置的影响
-        Assert.AreEqual(multiple, manager.Register(1, callback2), "多重监听设置应正确影响重复注册的结果");
+        Assert.That(manager.Register(1, callback2), Is.EqualTo(multiple), "多重监听设置应正确影响重复注册的结果");
     }
 
     [TestCase(true)]    // 注销所有回调
@@ -45,12 +45,12 @@ public class TestXEvent
         if (all)
         {
             // 验证注销所有回调应该成功
-            Assert.IsTrue(manager.Unregister(1), "注销所有回调应该成功");
+            Assert.That(manager.Unregister(1), Is.True, "注销所有回调应该成功");
         }
         else
         {
             // 验证注销指定回调应该成功
-            Assert.IsTrue(manager.Unregister(1, callback1), "注销指定回调应该成功");
+            Assert.That(manager.Unregister(1, callback1), Is.True, "注销指定回调应该成功");
         }
     }
 
@@ -68,8 +68,8 @@ public class TestXEvent
 
         // Assert
         // 验证清理后无法获取之前注册的回调
-        Assert.IsNull(manager.Get(1), "清理后事件1的回调应为空");
-        Assert.IsNull(manager.Get(2), "清理后事件2的回调应为空");
+        Assert.That(manager.Get(1), Is.Null, "清理后事件1的回调应为空");
+        Assert.That(manager.Get(2), Is.Null, "清理后事件2的回调应为空");
     }
 
     [Test]
@@ -83,13 +83,13 @@ public class TestXEvent
         // Act & Assert
         var callbacks = manager.Get(1);
         // 验证已注册事件的回调列表
-        Assert.IsNotNull(callbacks, "已注册事件的回调列表不应为空");
-        Assert.AreEqual(1, callbacks.Count, "回调列表应包含1个回调");
+        Assert.That(callbacks, Is.Not.Null, "已注册事件的回调列表不应为空");
+        Assert.That(callbacks.Count, Is.EqualTo(1), "回调列表应包含1个回调");
         Assert.That(callbacks, Does.Contain((XEvent.Callback)callback), "回调列表应包含已注册的回调");
 
         var nonExistCallbacks = manager.Get(999);
         // 验证未注册事件的回调列表
-        Assert.IsNull(nonExistCallbacks, "未注册事件的回调列表应为空");
+        Assert.That(nonExistCallbacks, Is.Null, "未注册事件的回调列表应为空");
     }
 
     [Test]
@@ -106,8 +106,8 @@ public class TestXEvent
         manager.Register(1, callback2);
         manager.Notify(1);
         // 验证普通回调的执行次数
-        Assert.AreEqual(1, callCount1, "第一个回调应该被执行一次");
-        Assert.AreEqual(1, callCount2, "第二个回调应该被执行一次");
+        Assert.That(callCount1, Is.EqualTo(1), "第一个回调应该被执行一次");
+        Assert.That(callCount2, Is.EqualTo(1), "第二个回调应该被执行一次");
 
         // 测试单次回调
         callCount1 = 0;
@@ -117,13 +117,13 @@ public class TestXEvent
 
         manager.Notify(2);  // 两个回调都会执行
         // 验证首次通知时两个回调都应执行
-        Assert.AreEqual(1, callCount1, "单次回调应该在首次通知时执行");
-        Assert.AreEqual(1, callCount2, "普通回调应该在首次通知时执行");
+        Assert.That(callCount1, Is.EqualTo(1), "单次回调应该在首次通知时执行");
+        Assert.That(callCount2, Is.EqualTo(1), "普通回调应该在首次通知时执行");
 
         manager.Notify(2);  // 只有非单次回调会执行
         // 验证二次通知时只有普通回调执行
-        Assert.AreEqual(1, callCount1, "单次回调不应在二次通知时执行");
-        Assert.AreEqual(2, callCount2, "普通回调应该在二次通知时执行");
+        Assert.That(callCount1, Is.EqualTo(1), "单次回调不应在二次通知时执行");
+        Assert.That(callCount2, Is.EqualTo(2), "普通回调应该在二次通知时执行");
 
         // 测试回调执行顺序
         int callOrder = 0;
@@ -136,8 +136,8 @@ public class TestXEvent
         manager.Notify(3);
 
         // 验证回调执行顺序
-        Assert.That(callback3Order, Is.GreaterThan(0), "第一个回调应该被执行");
-        Assert.That(callback4Order, Is.GreaterThan(0), "第二个回调应该被执行");
+        Assert.That(callback3Order, Is.Positive, "第一个回调应该被执行");
+        Assert.That(callback4Order, Is.Positive, "第二个回调应该被执行");
         Assert.That(callback4Order, Is.GreaterThan(callback3Order), "回调应该按注册顺序执行");
     }
 }

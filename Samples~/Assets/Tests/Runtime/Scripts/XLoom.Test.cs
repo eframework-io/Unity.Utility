@@ -30,7 +30,7 @@ public class TestXLoom : MonoBehaviour
         // Act
         XLoom.SetTimeout(callback, 200);
         yield return new WaitForSeconds(0.5f);
-        Assert.IsTrue(called, "Timeout 定时器应在到达指定时间后触发回调");
+        Assert.That(called, Is.True, "Timeout 定时器应在到达指定时间后触发回调");
         var offset = Time.fixedDeltaTime * 1000;
         Assert.That(deltaTime, Is.InRange(200 - offset, 200 + offset), "Timeout 定时器应当在指定时间范围内回调");
 
@@ -39,7 +39,7 @@ public class TestXLoom : MonoBehaviour
         var timer = XLoom.SetTimeout(callback, 200);
         XLoom.ClearTimeout(timer); // 清理定时器
         yield return new WaitForSeconds(0.5f);
-        Assert.IsFalse(called, "被清除的 Timeout 定时器不应当被回调");
+        Assert.That(called, Is.False, "被清除的 Timeout 定时器不应当被回调");
     }
 
     [UnityTest]
@@ -61,19 +61,19 @@ public class TestXLoom : MonoBehaviour
         // Act
         var timer = XLoom.SetInterval(callback, 200);
         yield return new WaitForSeconds(0.5f);
-        Assert.IsTrue(called, "Interval 定时器应在到达指定时间后触发回调");
+        Assert.That(called, Is.True, "Interval 定时器应在到达指定时间后触发回调");
         var offset = Time.fixedDeltaTime * 1000;
         Assert.That(deltaTime, Is.InRange(200 - offset, 200 + offset), "Interval 定时器应当在指定时间范围内回调");
 
         called = false;
         yield return new WaitForSeconds(0.5f);
-        Assert.IsTrue(called, "Interval 定时器应在到达指定时间后再次触发回调");
+        Assert.That(called, Is.True, "Interval 定时器应在到达指定时间后再次触发回调");
 
         // Assert
         called = false;
         XLoom.ClearInterval(timer); // 清理定时器
         yield return new WaitForSeconds(0.5f);
-        Assert.IsFalse(called, "被清除的 Interval 定时器不应当被回调");
+        Assert.That(called, Is.False, "被清除的 Interval 定时器不应当被回调");
     }
 
     [Test]
@@ -87,7 +87,7 @@ public class TestXLoom : MonoBehaviour
         XLoom.RunInMain(callback);
 
         // Assert
-        Assert.IsTrue(called, "在主线程中的任务应立即执行");
+        Assert.That(called, Is.True, "在主线程中的任务应立即执行");
     }
 
     [UnityTest]
@@ -99,11 +99,11 @@ public class TestXLoom : MonoBehaviour
 
         // Act
         XLoom.RunInNext(callback);
-        Assert.IsFalse(called, "下一帧执行的任务不应立即触发");
+        Assert.That(called, Is.False, "下一帧执行的任务不应立即触发");
         yield return null;
 
         // Assert
-        Assert.IsTrue(called, "任务应在下一帧被执行");
+        Assert.That(called, Is.True, "任务应在下一帧被执行");
     }
 
     [UnityTest]
@@ -118,7 +118,7 @@ public class TestXLoom : MonoBehaviour
         yield return new WaitUntil(() => task.IsCompleted);
 
         // Assert
-        Assert.IsTrue(called, "异步任务应在完成后设置标志");
+        Assert.That(called, Is.True, "异步任务应在完成后设置标志");
     }
 
     [UnityTest]
@@ -130,11 +130,11 @@ public class TestXLoom : MonoBehaviour
 
         // Act
         XLoom.RunCoroutine(coroutine);
-        Assert.IsFalse(called, "协程不应立即执行完成");
+        Assert.That(called, Is.False, "协程不应立即执行完成");
         yield return new WaitForSeconds(0.1f);
 
         // Assert
-        Assert.IsTrue(called, "协程应在等待时间后执行完成");
+        Assert.That(called, Is.True, "协程应在等待时间后执行完成");
     }
 
     [UnityTest]
@@ -150,7 +150,7 @@ public class TestXLoom : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         // Assert
-        Assert.IsFalse(called, "已停止的协程不应执行回调");
+        Assert.That(called, Is.False, "已停止的协程不应执行回调");
     }
 
     private IEnumerator TestCoroutine(Action action)

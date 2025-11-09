@@ -299,7 +299,8 @@ namespace EFramework.Unity.Utility
 
         internal static string projectPath;
         /// <summary>
-        /// ProjectPath 获取项目根目录路径，这个函数是线程安全的，可以多线程访问。
+        /// ProjectPath 获取项目根目录路径。这个函数是线程安全的，可以多线程访问。
+        /// 请在编辑器模式下使用该路径，避免在运行时使用该路径，考虑使用 LocalPath 替代之。
         /// </summary>
         public static string ProjectPath
         {
@@ -451,68 +452,68 @@ namespace EFramework.Unity.Utility
             }
 
             /// <summary>App 是应用类型的配置键。</summary>
-            public const string App = "Environment/App";
+            public const string App = "XEnv/App";
 
             /// <summary>AppDefault 是应用类型的默认值：客户端。</summary>
             public static readonly string AppDefault = AppType.Client.ToString();
 
             /// <summary>Mode 是运行模式的配置键。</summary>
-            public const string Mode = "Environment/Mode";
+            public const string Mode = "XEnv/Mode";
 
             /// <summary>ModeDefault 是运行模式的默认值：开发模式。</summary>
             public static readonly string ModeDefault = ModeType.Dev.ToString();
 
             /// <summary>Solution 是解决方案名称的配置键。</summary>
-            public const string Solution = "Environment/Solution";
+            public const string Solution = "XEnv/Solution";
 
             /// <summary>SolutionDefault 是解决方案名称的默认值。</summary>
             public static string SolutionDefault { get; private set; }
 
             /// <summary>Project 是项目名称的配置键。</summary>
-            public const string Project = "Environment/Project";
+            public const string Project = "XEnv/Project";
 
             /// <summary>ProjectDefault 是项目名称的默认值。</summary>
             public static string ProjectDefault { get; private set; }
 
             /// <summary>Product 是产品名称的配置键。</summary>
-            public const string Product = "Environment/Product";
+            public const string Product = "XEnv/Product";
 
             /// <summary>ProductDefault 是产品名称的默认值。</summary>
             public static string ProductDefault { get; private set; }
 
             /// <summary>Channel 是发布渠道的配置键。</summary>
-            public const string Channel = "Environment/Channel";
+            public const string Channel = "XEnv/Channel";
 
             /// <summary>ChannelDefault 是发布渠道的默认值。</summary>
             public const string ChannelDefault = "Default";
 
             /// <summary>Version 是版本号的配置键。</summary>
-            public const string Version = "Environment/Version";
+            public const string Version = "XEnv/Version";
 
             /// <summary>VersionDefault 是版本号的默认值。</summary>
             public static string VersionDefault { get; private set; }
 
             /// <summary>Author 是作者名称的配置键。</summary>
-            public const string Author = "Environment/Author";
+            public const string Author = "XEnv/Author";
 
             /// <summary>AuthorDefault 是作者名称的默认值：使用系统用户名。</summary>
             public const string AuthorDefault = "${Environment.UserName}";
 
             /// <summary>Secret 是应用密钥的配置键。</summary>
-            public const string Secret = "Environment/Secret";
+            public const string Secret = "XEnv/Secret";
 
             /// <summary>SecretDefault 是应用密钥的默认值：随机生成的8位字符串。</summary>
             public static string SecretDefault { get; private set; }
 
             /// <summary>Remote 是远程配置地址的配置键。</summary>
-            public const string Remote = "Environment/Remote";
+            public const string Remote = "XEnv/Remote";
 
             /// <summary>RemoteDefault 是远程配置地址的默认值：使用环境变量组合的 URL。</summary>
             public const string RemoteDefault = "${Environment.StoragePublic}/Preferences/${Environment.Author}/${Environment.Channel}/${Environment.Platform}/${Environment.Version}.json";
 
-            string XPrefs.IEditor.Section => "Environment";
+            string XPrefs.IEditor.Section => "XEnv";
 
-            string XPrefs.IEditor.Tooltip => "Preferences of Environment.";
+            string XPrefs.IEditor.Tooltip => "Preferences of XEnv.";
 
             bool XPrefs.IEditor.Foldable => true;
 

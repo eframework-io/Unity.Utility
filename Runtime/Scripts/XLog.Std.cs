@@ -112,7 +112,7 @@ namespace EFramework.Unity.Utility
         {
             public class Preferences : XPrefs.IEditor
             {
-                public const string Config = "Log/Std";
+                public const string Config = "XLog/Std";
 
                 public static readonly XPrefs.IBase ConfigDefault = new();
 
@@ -124,7 +124,7 @@ namespace EFramework.Unity.Utility
 
                 public static readonly bool ColorDefault = true;
 
-                string XPrefs.IEditor.Section => "Log";
+                string XPrefs.IEditor.Section => "XLog";
 
                 string XPrefs.IEditor.Tooltip => string.Empty;
 

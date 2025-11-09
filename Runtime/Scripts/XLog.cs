@@ -58,7 +58,7 @@ namespace EFramework.Unity.Utility
     ///     fileConf.Set("MaxLine", 1000000);    // 单文件最大行数
     ///     fileConf.Set("MaxSize", 134217728);  // 单文件最大体积（128MB）
     ///     
-    ///     preferences.Set("Log/File", fileConf);
+    ///     preferences.Set("XLog/File", fileConf);
     ///     XLog.Initialize(preferences);
     /// 
     /// 3. 日志标签
@@ -139,7 +139,7 @@ namespace EFramework.Unity.Utility
             Info = 6,
 
             /// <summary>
-            /// Debug 表示调试（7）的日志类型，用于调试和故障排除目的的消息
+            /// Debug 表示调试（7）的日志类型，用于调试和故障排除目的的消息。
             /// </summary>
             Debug = 7,
         }
@@ -370,7 +370,7 @@ namespace EFramework.Unity.Utility
             var tempLevel = LevelType.Undefined;
             foreach (var kvp in preferences)
             {
-                if (!kvp.Key.StartsWith("Log/")) continue;
+                if (!kvp.Key.StartsWith("XLog/")) continue;
 
                 var name = kvp.Key.Split('/')[1];
                 var conf = preferences.Get<XPrefs.IBase>(kvp.Key);

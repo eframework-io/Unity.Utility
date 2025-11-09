@@ -219,16 +219,17 @@ namespace EFramework.Unity.Utility
                 if (data.Level > level && !data.Force) return;
 
                 logQueue.Enqueue(data);
-
-                // 这里主动触发一次 Flush 事件，避免内存过高
-                // 尤其在 Update 循环中发生异常时，日志会瞬间增多
-                // 使用近似值判断是否需要 Flush，完整的轮转逻辑由 NeedRotate 负责
-                var count = logQueue.Count;
-                if ((maxLine > 0 && count >= maxLine) ||
-                    (maxSize > 0 && count * 10 >= maxSize))
-                {
-                    flushReqEvent.Set();
-                }
+                flushReqEvent.Set();
+                // 直接写入，不再缓存
+                // // 这里主动触发一次 Flush 事件，避免内存过高
+                // // 尤其在 Update 循环中发生异常时，日志会瞬间增多
+                // // 使用近似值判断是否需要 Flush，完整的轮转逻辑由 NeedRotate 负责
+                // var count = logQueue.Count;
+                // if ((maxLine > 0 && count >= maxLine) ||
+                //     (maxSize > 0 && count * 10 >= maxSize))
+                // {
+                //     flushReqEvent.Set();
+                // }
             }
 
             /// <summary>
@@ -536,7 +537,7 @@ namespace EFramework.Unity.Utility
         {
             public class Preferences : XPrefs.IEditor
             {
-                public const string Config = "Log/File";
+                public const string Config = "XLog/File";
 
                 public static readonly XPrefs.IBase ConfigDefault = new();
 
@@ -580,7 +581,7 @@ namespace EFramework.Unity.Utility
 
                 public static readonly int MaxHourDefault = 168;
 
-                string XPrefs.IEditor.Section => "Log";
+                string XPrefs.IEditor.Section => "XLog";
 
                 string XPrefs.IEditor.Tooltip => string.Empty;
 

@@ -62,7 +62,7 @@ fileConf.Set("MaxFile", 100);        // 最大文件数量
 fileConf.Set("MaxLine", 1000000);    // 单文件最大行数
 fileConf.Set("MaxSize", 134217728);  // 单文件最大体积（128MB）
 
-preferences.Set("Log/File", fileConf);
+preferences.Set("XLog/File", fileConf);
 XLog.Initialize(preferences);
 ```
 
@@ -77,7 +77,7 @@ var stdConf = new XPrefs.IBase();
 stdConf.Set("Level", "Info");        // 日志级别
 stdConf.Set("Color", true);          // 是否启用彩色输出
 
-preferences.Set("Log/Std", stdConf);
+preferences.Set("XLog/Std", stdConf);
 XLog.Initialize(preferences);
 ```
 

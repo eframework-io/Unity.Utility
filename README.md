@@ -1,11 +1,11 @@
-# Unity.Utility
+# EFramework Utility for Unity
 
 [![NPM](https://img.shields.io/npm/v/io.eframework.unity.utility?label=NPM&logo=npm)](https://www.npmjs.com/package/io.eframework.unity.utility)
 [![UPM](https://img.shields.io/npm/v/io.eframework.unity.utility?label=UPM&logo=unity&registry_uri=https://package.openupm.com)](https://openupm.com/packages/io.eframework.unity.utility)
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Explore-blue)](https://deepwiki.com/eframework-io/Unity.Utility)
 [![Discord](https://img.shields.io/discord/1422114598835851286?label=Discord&logo=discord)](https://discord.gg/XMPx2wXSz3)
 
-Unity.Utility 提供了基于 Unity 的配置管理、任务调度、日志记录、事件系统、文件处理等基础功能模块。
+基于 Unity 的通用基础类库，集成了首选项管理、多任务调度、日志输出、事件系统与文件处理等核心模块。
 
 ## 功能特性
 

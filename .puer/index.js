@@ -466,13 +466,13 @@ XEvent.Manager = class {
         return ret
     }
 
-    Notify(id, ...args) { this.CProxy.Notify(id, ...args) }
-
-    Clear() {
+    UnregisterAll() {
         this.callbacks = new Map()
         this.onces = new Map()
         this.map = new Map()
-        this.CProxy.Clear()
+        this.CProxy.UnregisterAll()
     }
+
+    Notify(id, ...args) { this.CProxy.Notify(id, ...args) }
 }
 //#endregion

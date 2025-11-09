@@ -85,7 +85,7 @@ eventManager.Unregister(1, callback);
 eventManager.Unregister(1);
 
 // 清除所有事件的所有回调
-eventManager.Clear();
+eventManager.UnregisterAll();
 ```
 
 ## 常见问题

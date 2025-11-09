@@ -51,7 +51,7 @@ namespace EFramework.Unity.Utility
     ///     eventManager.Unregister(1, callback);
     ///     
     ///     // 注销所有回调
-    ///     eventManager.Clear();
+    ///     eventManager.UnregisterAll();
     /// </code>
     /// 更多信息请参考模块文档。
     /// </remarks>

@@ -162,10 +162,10 @@ namespace EFramework.Unity.Utility
                 {
                     lock (pools)
                     {
-                        try { ret = pools.Dequeue(); }
-                        catch (Exception e)
+                        if (pools.Count > 0)
                         {
-                            XLog.Warn($"XPool.Object({typeof(T).FullName}): pools dequeue error: {e.Message}");
+                            try { ret = pools.Dequeue(); }
+                            catch (Exception e) { XLog.Warn($"XPool.Object({typeof(T).FullName}): pools dequeue error: {e.Message}"); }
                         }
                     }
                 }
@@ -237,11 +237,14 @@ namespace EFramework.Unity.Utility
                 {
                     lock (pools)
                     {
-                        try { ret = pools.Dequeue(); }
-                        catch (Exception e)
+                        if (pools.Count > 0)
                         {
-                            var str = type != null ? type.FullName : activator != null ? activator.Method.DeclaringType.Name : "null";
-                            XLog.Warn($"XPool.Object({str}): pools dequeue error: {e.Message}");
+                            try { ret = pools.Dequeue(); }
+                            catch (Exception e)
+                            {
+                                var str = type != null ? type.FullName : activator != null ? activator.Method.DeclaringType.Name : "null";
+                                XLog.Warn($"XPool.Object({str}): pools dequeue error: {e.Message}");
+                            }
                         }
                     }
                 }

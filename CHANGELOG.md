@@ -1,5 +1,12 @@
 # 更新记录
 
+## [1.1.2] - 
+### 新增
+- 新增 XTime.GetMicrosecond 函数以获取高精度的时间戳
+
+### 优化
+- 优化 XTime.GetTimestamp/GetMillisecond 函数的实现
+
 ## [1.1.1] - 2025-11-09
 ### 修复
 - 更正 package.json 中的产品名称

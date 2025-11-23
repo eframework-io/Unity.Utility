@@ -30,12 +30,13 @@ var oneDay = XTime.Day1;              // 86400秒
 
 ### 2. 时间戳操作
 
-提供秒级和毫秒级时间戳的获取方法，基于 1970-01-01 计算。
+提供基于本地时区的秒级、毫秒级和微秒级时间戳的获取方法。
 
 ```csharp
 // 获取当前时间戳
 var timestamp = XTime.GetTimestamp();  // 获取秒级时间戳
-var millis = XTime.GetMillisecond();  // 获取毫秒级时间戳
+var milliseconds = XTime.GetMillisecond();  // 获取毫秒级时间戳
+var microseconds = XTime.GetMicrosecond();  // 获取微秒级时间戳
 ```
 
 ### 3. 时间转换

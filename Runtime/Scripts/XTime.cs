@@ -30,11 +30,12 @@ namespace EFramework.Unity.Utility
     /// 
     /// 2. 时间戳操作
     /// 
-    ///     提供秒级和毫秒级时间戳的获取方法，基于 1970-01-01 计算。
+    ///     提供基于本地时区的秒级、毫秒级和微秒级时间戳的获取方法。
     /// 
     ///     // 获取当前时间戳
     ///     var timestamp = XTime.GetTimestamp();  // 获取秒级时间戳
-    ///     var millis = XTime.GetMillisecond();  // 获取毫秒级时间戳
+    ///     var milliseconds = XTime.GetMillisecond();  // 获取毫秒级时间戳
+    ///     var microseconds = XTime.GetMicrosecond();  // 获取微秒级时间戳
     /// 
     /// 3. 时间转换
     /// 
@@ -465,35 +466,24 @@ namespace EFramework.Unity.Utility
         /// GetTimestamp 获取当前时间的秒级时间戳。
         /// </summary>
         /// <returns>从1970年1月1日至今的秒数。</returns>
-        /// <remarks>
-        /// 时间戳基于本地时区计算，已考虑时区偏移。
-        /// </remarks>
-        public static int GetTimestamp()
-        {
-            var ts = DateTime.Now - Initial;
-            return Convert.ToInt32(ts.TotalSeconds);
-        }
+        public static int GetTimestamp() { return (int)((DateTime.Now.Ticks - Initial.Ticks) / 10_000_000); }
 
         /// <summary>
         /// GetMillisecond 获取当前时间的毫秒级时间戳。
         /// </summary>
         /// <returns>从1970年1月1日至今的毫秒数。</returns>
-        /// <remarks>
-        /// 时间戳基于本地时区计算，已考虑时区偏移。
-        /// </remarks>
-        public static long GetMillisecond()
-        {
-            var ts = DateTime.Now - Initial;
-            return Convert.ToInt64(ts.TotalMilliseconds);
-        }
+        public static long GetMillisecond() { return (DateTime.Now.Ticks - Initial.Ticks) / 10_000; }
+
+        /// <summary>
+        /// GetMicrosecond 获取当前时间的微秒级时间戳。
+        /// </summary>
+        /// <returns>从1970年1月1日至今的微秒数。</returns>
+        public static long GetMicrosecond() { return (DateTime.Now.Ticks - Initial.Ticks) / 10; }
 
         /// <summary>
         /// NowTime 获取当前系统时间。
         /// </summary>
         /// <returns>当前的 DateTime 对象。</returns>
-        /// <remarks>
-        /// 直接返回 DateTime.Now，包含日期和时间信息。
-        /// </remarks>
         public static DateTime NowTime() { return DateTime.Now; }
 
         /// <summary>
@@ -501,9 +491,6 @@ namespace EFramework.Unity.Utility
         /// </summary>
         /// <param name="timestamp">秒级时间戳。</param>
         /// <returns>对应的 DateTime 对象。</returns>
-        /// <remarks>
-        /// 基于初始时间（1970-01-01）进行计算，考虑了本地时区。
-        /// </remarks>
         public static DateTime ToTime(int timestamp) { return Initial.AddSeconds(timestamp); }
 
         /// <summary>
@@ -511,9 +498,6 @@ namespace EFramework.Unity.Utility
         /// </summary>
         /// <param name="timestamp">指定时间戳，默认使用当前时间。</param>
         /// <returns>距离下一个零点的秒数。</returns>
-        /// <remarks>
-        /// 考虑了时区偏移（+8小时），确保在本地时间计算零点。
-        /// </remarks>
         public static int TimeToZero(int timestamp = -1)
         {
             var t = timestamp;
@@ -526,9 +510,6 @@ namespace EFramework.Unity.Utility
         /// </summary>
         /// <param name="timestamp">指定时间戳，默认使用当前时间。</param>
         /// <returns>当天零点的秒级时间戳。</returns>
-        /// <remarks>
-        /// 考虑了时区偏移（+8小时），确保在本地时间计算零点。
-        /// </remarks>
         public static int ZeroTime(int timestamp = -1)
         {
             var t = timestamp;

@@ -1,8 +1,14 @@
 # 更新记录
 
-## [1.1.2] - 
+## [1.2.0] - 2025-12-07
+### 修复
+- 修复 XObject.ToJson 在 Compact 模式下的换行符问题
+
 ### 新增
 - 新增 XTime.GetMicrosecond 函数以获取高精度的时间戳
+
+### 优化
+- 调整 XPrefs.IAsset.Uri 的实现，无编辑器模式下回退至 Assets/Preferences.json 文件
 
 ### 优化
 - 优化 XTime.GetTimestamp/GetMillisecond 函数的实现

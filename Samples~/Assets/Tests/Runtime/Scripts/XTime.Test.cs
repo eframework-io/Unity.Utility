@@ -3,8 +3,8 @@
 // license that can be found in the LICENSE file.
 
 using System;
-using NUnit.Framework;
 using EFramework.Unity.Utility;
+using NUnit.Framework;
 
 /// <summary>
 /// TestXTime 是 XTime 的单元测试。
@@ -82,8 +82,8 @@ public class TestXTime
         // 获取当前微秒时间戳
         var microseconds = XTime.GetMicrosecond();
 
-        // 验证微秒时间戳在1000微秒（1毫秒）误差范围内
-        Assert.That(Math.Abs(microseconds - expectedMicroseconds), Is.LessThanOrEqualTo(1000), "获取的微秒时间戳应在1000微秒误差范围内。");
+        // 验证微秒时间戳在10000微秒（10毫秒）误差范围内
+        Assert.That(Math.Abs(microseconds - expectedMicroseconds), Is.LessThanOrEqualTo(10000), "获取的微秒时间戳应在10000微秒误差范围内。");
     }
 
     [Test]

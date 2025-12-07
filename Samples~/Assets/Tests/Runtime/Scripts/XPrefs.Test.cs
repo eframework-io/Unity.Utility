@@ -2,10 +2,10 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+using EFramework.Unity.Utility;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using EFramework.Unity.Utility;
 
 /// <summary>
 /// TestXPrefs 是 XPrefs 的单元测试。

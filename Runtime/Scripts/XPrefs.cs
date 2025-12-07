@@ -3,9 +3,9 @@
 // license that can be found in the LICENSE file.
 
 using System;
-using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -991,7 +991,7 @@ namespace EFramework.Unity.Utility
         {
             /// <summary>
             /// Uri 是首选项文件的路径。
-            /// 编辑器环境优先返回环境变量中设置的 Preferences@Asset 字段，其次返回 EditorPrefs 持久化的值。
+            /// 编辑器环境优先返回环境变量中设置的 Preferences@Asset 字段，其次返回 EditorPrefs 持久化的值，最后返回 Assets/Preferences.json 文件。
             /// 运行时环境下返回 XEnv.AssetPath 目录下的 Preferences.json 文件。
             /// </summary>
             public static string Uri
@@ -1003,7 +1003,10 @@ namespace EFramework.Unity.Utility
                     if (!string.IsNullOrEmpty(path)) return path;
 
                     var key = XFile.PathJoin(Path.GetFullPath("./"), "Preferences");
-                    return UnityEditor.EditorPrefs.GetString(key);
+                    path = UnityEditor.EditorPrefs.GetString(key);
+                    if (!string.IsNullOrEmpty(path)) return path;
+
+                    return "Assets/Preferences.json";
 #else
                     return XFile.PathJoin(XEnv.AssetPath, "Preferences.json");
 #endif

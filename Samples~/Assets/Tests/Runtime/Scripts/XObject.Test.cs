@@ -2,9 +2,9 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
+using System.Runtime.InteropServices;
 using EFramework.Unity.Utility;
 using NUnit.Framework;
-using System.Runtime.InteropServices;
 
 /// <summary>
 /// TestXObject 是 XObject 的单元测试。
@@ -84,11 +84,11 @@ public class TestXObject
 
         // Assert
         Assert.That(jsonPretty, Is.Not.Null, "格式化的 JSON 字符串不应为空");
-        Assert.That(jsonPretty.Contains("\"Id\": 1"), Is.True, "格式化的 JSON 应包含格式化后的 Id 字段");
-        Assert.That(jsonPretty.Contains("\"Name\": \"Test\""), Is.True, "格式化的 JSON 应包含格式化后的 Name 字段");
+        Assert.That(jsonPretty.Contains("{\n    \"Id\": 1,"), Is.True, "格式化的 JSON 应包含格式化后的 Id 字段");
+        Assert.That(jsonPretty.Contains("\"Name\": \"Test\"\n}"), Is.True, "格式化的 JSON 应包含格式化后的 Name 字段");
 
         Assert.That(jsonCompact, Is.Not.Null, "压缩的 JSON 字符串不应为空");
-        Assert.That(jsonCompact.Contains("\"Id\":1"), Is.True, "压缩的 JSON 应包含未格式化的 Id 字段");
-        Assert.That(jsonCompact.Contains("\"Name\":\"Test\""), Is.True, "压缩的 JSON 应包含未格式化的 Name 字段");
+        Assert.That(jsonCompact.Contains("{\"Id\":1,"), Is.True, "压缩的 JSON 应包含未格式化的 Id 字段");
+        Assert.That(jsonCompact.Contains("\"Name\":\"Test\"}"), Is.True, "压缩的 JSON 应包含未格式化的 Name 字段");
     }
 }

@@ -836,7 +836,7 @@ namespace EFramework.Unity.Utility
             }
             //if (aMode == JSONTextMode.Indent)
             //    aSB.AppendLine().Append(' ', aIndent);
-            if (count > 0) aSB.AppendLine().Append(' ', aIndent);
+            if (aMode == JSONTextMode.Indent && count > 0) aSB.AppendLine().Append(' ', aIndent);
             aSB.Append(']');
         }
 
@@ -1065,7 +1065,7 @@ namespace EFramework.Unity.Utility
             }
             //if (aMode == JSONTextMode.Indent)
             //    aSB.AppendLine().Append(' ', aIndent);
-            if (m_Dict.Count > 0) aSB.AppendLine().Append(' ', aIndent);
+            if (aMode == JSONTextMode.Indent && m_Dict.Count > 0) aSB.AppendLine().Append(' ', aIndent);
             aSB.Append('}');
         }
 
